@@ -22,6 +22,11 @@ namespace BookOrganizer.Views
         public MainView()
         {
             InitializeComponent();
+            using (var c = new Context()) 
+            {
+                c.Authors.Add(new Author() { FirstName = "Александр", SecondName = "Пушкин", Born = 1111, Dead = 1148 });
+                c.SaveChanges();
+            }
         }
     }
 }
