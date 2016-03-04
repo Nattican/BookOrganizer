@@ -14,15 +14,40 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Command="{Binding ExitCommand}" Header="E_xit" InputGestureText="Ctrl-E" />
+            <MenuItem Header="BookOrganaizer" Click="MenuItem_Click">
+                <MenuItem Header="О программе..." InputGestureText="Ctrl-O"></MenuItem>
+                <MenuItem Header="Настройки..." InputGestureText="Ctrl-N"></MenuItem>
+                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
+            </MenuItem>
+            <MenuItem Header="Файл">
+                <MenuItem Header="Сохранить..." InputGestureText="Ctrl-S"/>
+                <MenuItem Header="Сохранить как..."/>
+                <Separator></Separator>
+                <MenuItem Header="Библиотека"/>
+                <!--Все списки в одном-->
+            </MenuItem>
+            <MenuItem Header="Править">
+                <MenuItem Header="Отменить" InputGestureText="Ctrl-Z"/>
+                <MenuItem Header="Повторить" InputGestureText="Ctrl-Y"/>
+                <Separator></Separator>
+                <MenuItem Header="Добавить книгу"/>
+                <MenuItem Header="Удалить книгу"/>
+                <MenuItem Header="Создать список"/>
+                <MenuItem Header="Удалить список"/>
             </MenuItem>
         </Menu>
 
         <Grid>
-            <DataGrid HorizontalAlignment="Left" Margin="52,46,0,0" VerticalAlignment="Top" Height="273" Width="633">
+            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Height="303" Width="785" Margin="0,41,0,0">
                 <ColumnDefinition></ColumnDefinition>
             </DataGrid>
+            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.173,0.923" Margin="140,10,0,0">
+                <ComboBoxItem Content="Читаю сейчас"/>
+                <ComboBoxItem Content="Прочитано"/>
+                <ComboBoxItem Content="Вишлист"/>
+            </ComboBox>
+            <Button Content="Показать" HorizontalAlignment="Left" Margin="295,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
+            <Label Content="Выбрать список" HorizontalAlignment="Left" Margin="28,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.007,0.423" Width="107" Height="32"/>
             <!-- Add additional content here -->
         </Grid>
     </DockPanel>

@@ -28,5 +28,10 @@ namespace BookOrganizer.Views
                 c.SaveChanges();
             }
         }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }
