@@ -24,14 +24,16 @@ namespace BookOrganizer.Views
             InitializeComponent();
             using (var c = new Context()) 
             {
-                c.Authors.Add(new Author() { FirstName = "Александр", SecondName = "Пушкин", Born = 1111, Dead = 1148 });
-                c.SaveChanges();
+                //c.Authors.Add(new Author() { FirstName = "Александр", SecondName = "Пушкин", Born = 1111, Dead = 1148 });
+                //c.SaveChanges();
             }
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            ApiWindow api = new ApiWindow();
+            api.Show();
         }
+
     }
 }

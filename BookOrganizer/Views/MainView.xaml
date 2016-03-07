@@ -1,7 +1,7 @@
 ﻿<Window x:Class="BookOrganizer.Views.MainView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:c="clr-namespace:BookOrganizer.Commands" Title="Book Organizer" Height="400" Width="800">
+    xmlns:c="clr-namespace:BookOrganizer.Commands" Title="Book Organizer" Height="400" Width="800" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <!-- Allows a KeyBinding to be associated with a command defined in the View Model  -->
@@ -14,11 +14,6 @@
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="BookOrganaizer" Click="MenuItem_Click">
-                <MenuItem Header="О программе..." InputGestureText="Ctrl-O"></MenuItem>
-                <MenuItem Header="Настройки..." InputGestureText="Ctrl-N"></MenuItem>
-                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
-            </MenuItem>
             <MenuItem Header="Файл">
                 <MenuItem Header="Сохранить..." InputGestureText="Ctrl-S"/>
                 <MenuItem Header="Сохранить как..."/>
@@ -34,6 +29,13 @@
                 <MenuItem Header="Удалить книгу"/>
                 <MenuItem Header="Создать список"/>
                 <MenuItem Header="Удалить список"/>
+                <Separator></Separator>
+                <MenuItem Header="Что бы почитать?" Click="MenuItem_Click"/>
+            </MenuItem>
+            <MenuItem Header="BookOrganaizer" >
+                <MenuItem Header="О программе..." InputGestureText="Ctrl-O"/>
+                <MenuItem Header="Настройки..." InputGestureText="Ctrl-N"/>
+                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
         </Menu>
 
