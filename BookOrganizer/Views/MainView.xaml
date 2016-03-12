@@ -9,47 +9,77 @@
     </Window.Resources>
 
     <Window.InputBindings>
-        <KeyBinding Key="E" Modifiers="Control" Command="{StaticResource ExitCommandReference}" />
+        <KeyBinding Key="Q" Modifiers="Control" Command="{StaticResource ExitCommandReference}" />
     </Window.InputBindings>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Файл">
+            <MenuItem IsEnabled="False" Header="Файл">
                 <MenuItem Header="Сохранить..." InputGestureText="Ctrl-S"/>
                 <MenuItem Header="Сохранить как..."/>
-                <Separator></Separator>
+                <Separator/>
                 <MenuItem Header="Библиотека"/>
                 <!--Все списки в одном-->
             </MenuItem>
-            <MenuItem Header="Править">
+            <MenuItem IsEnabled="False" Header="Править">
                 <MenuItem Header="Отменить" InputGestureText="Ctrl-Z"/>
                 <MenuItem Header="Повторить" InputGestureText="Ctrl-Y"/>
-                <Separator></Separator>
-                <MenuItem Header="Добавить книгу"/>
-                <MenuItem Header="Удалить книгу"/>
-                <MenuItem Header="Создать список"/>
-                <MenuItem Header="Удалить список"/>
-                <Separator></Separator>
-                <MenuItem Header="Что бы почитать?" Click="MenuItem_Click"/>
             </MenuItem>
+
+            <MenuItem Header="Что бы почитать?" Click="MenuItem_Click"/>
+
             <MenuItem Header="BookOrganaizer" >
-                <MenuItem Header="О программе..." InputGestureText="Ctrl-O"/>
-                <MenuItem Header="Настройки..." InputGestureText="Ctrl-N"/>
+                <MenuItem IsEnabled="False" Header="О программе..." InputGestureText="Ctrl-O"/>
+                <MenuItem IsEnabled="False" Header="Настройки..." InputGestureText="Ctrl-N"/>
                 <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
         </Menu>
 
         <Grid>
-            <DataGrid HorizontalAlignment="Left" VerticalAlignment="Top" Height="303" Width="785" Margin="0,41,0,0">
-                <ColumnDefinition></ColumnDefinition>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="21*"/>
+                <ColumnDefinition Width="773*"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid
+                ItemsSource="{Binding CurrentList}"
+                AutoGenerateColumns="False"                                                 
+                CanUserDeleteRows="False"  
+                CanUserAddRows="False"            
+                CanUserResizeColumns="True"
+                CanUserReorderColumns="False"
+                CanUserResizeRows="False"
+                AllowDrop="False"
+                RowDetailsVisibilityMode="Collapsed"
+                IsReadOnly="True" ClipboardCopyMode="ExcludeHeader" SelectionMode="Single"
+                VerticalAlignment="Top" Height="303" HorizontalAlignment="Stretch" Grid.ColumnSpan="2" Margin="25,41,25,5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                                        Header="Название"                                                                                  
+                                        Binding="{Binding .Title}"/>
+                    <DataGridTextColumn
+                                        Header="Автор"                                                                                  
+                                        Binding="{Binding .Author}"/>
+                    <DataGridTextColumn
+                                        Header="Год написания"                                                                                  
+                                        Binding="{Binding .Year}"/>
+                    <DataGridTextColumn
+                                        Header="Жанр"                                                                                  
+                                        Binding="{Binding .Genre}"/>
+                </DataGrid.Columns>
             </DataGrid>
-            <ComboBox HorizontalAlignment="Left" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.173,0.923" Margin="140,10,0,0">
-                <ComboBoxItem Content="Читаю сейчас"/>
-                <ComboBoxItem Content="Прочитано"/>
-                <ComboBoxItem Content="Вишлист"/>
-            </ComboBox>
-            <Button Content="Показать" HorizontalAlignment="Left" Margin="295,10,0,0" VerticalAlignment="Top" Width="75" Height="22"/>
-            <Label Content="Выбрать список" HorizontalAlignment="Left" Margin="28,8,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.007,0.423" Width="107" Height="32"/>
+
+
+            <Grid Grid.Column="1" x:Name = "MyTicks" Margin="10 3 10 0" HorizontalAlignment="Left" Width="600" VerticalAlignment="Top">
+                <Grid Width="300" HorizontalAlignment="Left">
+                    <TextBlock Text="Читал" TextAlignment="Left" FontSize="13" />
+                    <TextBlock Text="Читаю сейчас" HorizontalAlignment="Center" FontSize="13"/>
+                    <TextBlock Text="Буду читать" TextAlignment="Right" FontSize="13"/>
+                </Grid>
+                <Slider Margin="0 15 0 0" Minimum="0" Maximum="2" Value="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"  IsSnapToTickEnabled="true" VerticalAlignment="Top" HorizontalAlignment="Left" TickPlacement="TopLeft" Foreground="#FF281E1E" Width="300"/>
+
+                <Button Margin="400 0 0 0" Height="25" Content="Добавить книгу" Command="{Binding AddBookCommand}"/>
+
+            </Grid>
             <!-- Add additional content here -->
         </Grid>
     </DockPanel>

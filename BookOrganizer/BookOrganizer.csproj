@@ -71,13 +71,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ApiWindow.xaml.cs">
+    <Compile Include="API\ApiWindow.xaml.cs">
       <DependentUpon>ApiWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="API_Data.cs" />
+    <Compile Include="API\API_Data.cs" />
+    <Compile Include="Migrations\201603120951158_InitialCreate.cs" />
+    <Compile Include="Migrations\201603120951158_InitialCreate.Designer.cs">
+      <DependentUpon>201603120951158_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201603120954020_2nd.cs" />
+    <Compile Include="Migrations\201603120954020_2nd.Designer.cs">
+      <DependentUpon>201603120954020_2nd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="ViewModels\AddBookViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\ViewModelBase.cs" />
     <Compile Include="DataBaseConnection.cs" />
+    <Compile Include="Views\AddBookView.xaml.cs">
+      <DependentUpon>AddBookView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -87,20 +100,17 @@
     </Compile>
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
-    <Page Include="ApiWindow.xaml">
+    <Page Include="API\ApiWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\AddBookView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Window1.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +127,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Migrations\201603120951158_InitialCreate.resx">
+      <DependentUpon>201603120951158_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201603120954020_2nd.resx">
+      <DependentUpon>201603120954020_2nd.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

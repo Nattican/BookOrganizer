@@ -1,10 +1,10 @@
-﻿<Window x:Class="BookOrganizer.ApiWindow"
+﻿<Window x:Class="BookOrganizer.API.ApiWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Поиск" Height="400" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+        Title="Поиск" Height="420" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
     <DockPanel>
         <Grid>
-            <ComboBox x:Name="comboBox1" HorizontalAlignment="Left" Margin="10,39,0,0" VerticalAlignment="Top" Width="164" SelectedIndex="0" SelectionChanged="comboBox1_SelectionChanged">
+            <ComboBox x:Name="comboBox1" HorizontalAlignment="Left" Margin="80,40,0,0" VerticalAlignment="Top" Width="164" FontSize="14.5" SelectedIndex="0" SelectionChanged="comboBox1_SelectionChanged">
                 <ComboBoxItem Content="Основной фонд"/>
                 <ComboBoxItem Content="Литература"/>
                 <ComboBoxItem Content="Иностранные языки"/>
@@ -29,12 +29,12 @@
                 <ComboBoxItem Content="Политология"/>
                 <ComboBoxItem Content="Философия"/>
             </ComboBox>
-            <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="191,38,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="190" Text="Дама"/>
-            <Button x:Name="searchButton" Content="Искать" HorizontalAlignment="Left" Margin="386,38,0,0" VerticalAlignment="Top" Width="95" Click="searchButton_Click" IsDefault="True"/>
+            <TextBox x:Name="searchBox" HorizontalAlignment="Right" Height="23" Margin=" 0 40 120 0" TextWrapping="Wrap" VerticalAlignment="Top" FontSize="14.5" Width="190" Text=""/>
+            <Button x:Name="searchButton" Content="Поиск" HorizontalAlignment="Right" Margin="0 40 10 0" VerticalAlignment="Top" Width="95" Click="searchButton_Click" IsDefault="True"/>
             <ListBox x:Name="listBox1" HorizontalAlignment="Left" Height="10" Margin="10,406,0,0" VerticalAlignment="Top" Width="452" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
-            <Label Content="Выберите раздел или введите книгу для поиска:" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"/>
-            <DataGrid x:Name="dataGrid2" HorizontalAlignment="Left" Margin="10,80,0,0" VerticalAlignment="Top" Height="276" Width="774" AutoGenerateColumns="true" FontFamily="Calibri Light" MinRowHeight="40"/>
-            <Button x:Name="addButton" Content="Добавить" HorizontalAlignment="Left" Margin="689,38,0,0" VerticalAlignment="Top" Width="85" Click="Button_Click"/>
+            <Label Content="Раздел:" HorizontalAlignment="Left" FontSize="15" Margin="10,37,0,0" VerticalAlignment="Top"/>
+            <DataGrid x:Name="dataGrid2" HorizontalAlignment="Left" Margin="10,85,0,0" VerticalAlignment="Top" Height="276" Width="774" AutoGenerateColumns="true" FontFamily="Calibri Light" MinRowHeight="40"/>
+            <Button x:Name="addButton" Content="Добавить" HorizontalAlignment="Right" Margin="0 0 35 5" VerticalAlignment="Bottom" Width="85" Click="Button_Click"/>
         </Grid>
     </DockPanel>
 </Window>

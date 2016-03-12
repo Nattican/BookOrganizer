@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BookOrganizer.API;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,11 +23,7 @@ namespace BookOrganizer.Views
         public MainView()
         {
             InitializeComponent();
-            using (var c = new Context()) 
-            {
-                //c.Authors.Add(new Author() { FirstName = "Александр", SecondName = "Пушкин", Born = 1111, Dead = 1148 });
-                //c.SaveChanges();
-            }
+           
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)

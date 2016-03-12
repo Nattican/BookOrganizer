@@ -5,68 +5,33 @@ using System.Text;
 using System.Data.Entity;
 using System.ComponentModel.DataAnnotations;
 
-namespace BookOrganizer.Views
+namespace BookOrganizer
 {
     public class Context : DbContext
     {
         public DbSet<Book> Books { get; set; }
-        public DbSet<Author> Authors { get; set; }
-        public DbSet<Start> Started { get; set; }
-        public DbSet<Finish> Finished { get; set; }
-        public DbSet<FutureBook> FutureList { get; set; }
         public DbSet<Genre> Genres { get; set; }
-        public Context():base() { }
-        // : base("BooksBase") { }
+
+        public Context() : base("BookOrganiser") { }
     }
 
     public class Book
     {
-        public string Id { get; set; }
+        public int Id { get; set; }
         [Required]
         public string Title { get; set; }
         [Required]
-        public Author Author { get; set; }
-        [Required]
+        public string Author { get; set; }
         public int Year { get; set; }
         public Genre Genre { get; set; }
-    }
-    public class Author
-    {
-        public int Id { get; set; }
-        [Required]
-        public string FirstName { get; set; }
-        [Required]
-        public string SecondName { get; set; }
-        public int Born { get; set; }
-        public int Dead { get; set; }
-    }
-    public class Start
-    {
-        public int Id { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-        [Required]
-        public Book Book { get; set; }
-    }
-    public class Finish
-    {
-        public int Id { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-        [Required]
-        public Book Book { get; set; }
+        public int Pages { get; set; }
+        public string Annotation { get; set; }
+        public DateTime? StartTime { get; set; }
+        public DateTime? FinishTime { get; set; }
         public string Comment { get; set; }
-        [Required]
         public int Mark { get; set; }
     }
-    public class FutureBook
-    {
-        public int Id { get; set; }
-        [Required]
-        public Book Book { get; set; }
-        [Required]
-        public DateTime Time { get; set; }
-    }
+    
     public class Genre
     {
         public int Id { get; set; }
@@ -74,7 +39,6 @@ namespace BookOrganizer.Views
         public string Name { get; set; }
         public string Description { get; set; }
     }
-
 
     public static class DB
     {

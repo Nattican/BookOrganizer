@@ -1,21 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 using Newtonsoft.Json;
+using BookOrganizer.Views;
+using BookOrganizer.ViewModels;
 
-namespace BookOrganizer
+namespace BookOrganizer.API
 {
     /// <summary>
     /// Логика взаимодействия для ApiWindow.xaml
@@ -23,43 +17,36 @@ namespace BookOrganizer
     public partial class ApiWindow : Window
     {
         public event Action<Book> Result1;
-        public event Action<string, string, string> Result;
-        Window1 w1;
         List<Book> bb;
 
         public ApiWindow()
         {
             InitializeComponent();
             Result1 += OnAdd;
-            Result += MainWindow_Result;
-        }
-
-        void MainWindow_Result(string arg1, string arg2, string arg3)
-        {
-            w1.textBox1.Text = arg1;
-            w1.textBox2.Text = arg2;
-            w1.textBox3.Text = arg3;
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            w1 = new Window1();
-            if (dataGrid2.SelectedItem != null)
+            try// на случай пустой строки
             {
-                Book b = (Book)dataGrid2.SelectedItem;
-
-                if (Result != null)
-                    Result(b.Author, b.Name, b.Year);
-                w1.Show();
+                if (dataGrid2.SelectedItem != null)
+                {
+                    var selectedBook = (Book)dataGrid2.SelectedItem;
+                    var v = new AddBookView();
+                    v.DataContext = new AddBookViewModel(selectedBook.Author, selectedBook.Name, selectedBook.Year,int.Parse(selectedBook.Pages));
+                    v.Show();
+                }
             }
+            catch { }
         }
 
         private void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            string s = textBox1.Text.ToString().Trim();
-            if (s == "") MessageBox.Show("Введите название!");
-            listBox1.Items.Clear();
+            var s = searchBox.Text.Trim();
+            if (s == "") return;
+            searchBox.Text = "";
 
+            listBox1.Items.Clear();
             try
             {
                 bb = new List<Book>();
