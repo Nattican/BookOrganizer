@@ -1,0 +1,70 @@
+﻿<Window x:Class="BookOrganizer.Views.AddBookView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:c="clr-namespace:BookOrganizer.Commands"
+       Title="Книга" Height="392" Width="655" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
+    <Grid Margin="0">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" x:Name = "MyTicks" Margin="10 3 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+
+            <TextBlock Text="Читал" TextAlignment="Left" FontSize="16" />
+            <TextBlock Text="Читаю/Сейчас начну читать" HorizontalAlignment="Center" FontSize="16"/>
+            <TextBlock Text="Буду читать" TextAlignment="Right" FontSize="16"/>
+            <Slider x:Name="StateOfBook" Margin="0 20 0 0" Minimum="0" Maximum="2" Value="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"  IsSnapToTickEnabled="true" VerticalAlignment="Top" HorizontalAlignment="Stretch" TickPlacement="TopLeft" Foreground="#FF281E1E"/>
+        </Grid>
+
+        <Grid Grid.Row="1" Margin="10">
+            <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5 -10 0 0 ">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Автор книги" FontSize="15"/>
+                <TextBox x:Name="AuthorBox" Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" FontSize="20" Height="33" Width="130"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 60">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Название книги" FontSize="15"/>
+                <TextBox x:Name="TitleBox" MaxWidth="300" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" FontSize="20"  Height="33"/>
+                <Grid Height="20" DockPanel.Dock="Top"/>
+                <Button DockPanel.Dock="Top" Grid.Row="2" Command="{Binding SubmitCommand}" Content="Пошёл!" HorizontalAlignment="Center" VerticalAlignment="Top" Height="35" Width="137"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin=" 0 -10 5 0">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Год выпуска" FontSize="15"/>
+                <TextBox x:Name="YearBox" Text="{Binding Year, UpdateSourceTrigger=PropertyChanged}" KeyDown="OnlyDigitsOnlyFour" FontSize="20" Height="33" Width="120"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Аннотация" FontSize="15"/>
+                <TextBox Text="{Binding Annotation, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" x:Name="AnnotationBox" FontSize="14" Height="80" Width="310"/>
+            </DockPanel>
+            <DockPanel IsEnabled="{Binding AfterRead}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Комментарий" FontSize="15"/>
+                <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" x:Name="CommentBox" FontSize="14" Height="80" Width="310"/>
+            </DockPanel>
+            <DockPanel IsEnabled="{Binding AfterRead}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="150 1 0 0">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Дата завершения" FontSize="15"/>
+                <DatePicker x:Name="FinishTimeBox" SelectedDateChanged="FinishTimeBox_SelectedDateChanged" Height="26" Width="120" IsTodayHighlighted="True" DisplayDateStart="01.01.1974"  DisplayDateEnd="01.01.2100" SelectedDate="{Binding FinishTime, UpdateSourceTrigger=PropertyChanged}"/>
+            </DockPanel>
+            <DockPanel  HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0 1 150 0">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Дата начала" FontSize="15"/>
+                <DatePicker x:Name="StartTimeBox" Height="26" Width="120" IsTodayHighlighted="True" DisplayDateStart="01.01.1974"  DisplayDateEnd="01.01.2100" SelectedDate="{Binding StartTime, UpdateSourceTrigger=PropertyChanged}"/>
+            </DockPanel>
+            <DockPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0 0 30 10">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Жанр" FontSize="15"/>
+                <ComboBox x:Name="GenreBox" FontSize="20" Height="33" Width="120" SelectedItem="{Binding Genre, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Genres}" DisplayMemberPath="Name"/>
+            </DockPanel>
+
+            <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30 0 0 10">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Cтраниц" FontSize="15"/>
+                <TextBox x:Name="PagesBox" FontSize="20" Height="33" KeyDown="PagesBox_KeyDown" Text="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
+            </DockPanel>
+            <DockPanel IsEnabled="{Binding  AfterRead}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110 0 0 10">
+                <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Моя оценка" FontSize="15"/>
+                <ComboBox x:Name="MarkBox" SelectedItem="{Binding Mark, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding AvailableMarks}" FontSize="20" Height="33" Width="60"/>
+            </DockPanel>
+
+
+        </Grid>
+
+    </Grid>
+</Window>
+
