@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
 using BookOrganizer.Commands;
-using BookOrganizer.ViewModels;
 using System.Collections.ObjectModel;
 using BookOrganizer.Views;
 
@@ -130,7 +128,81 @@ namespace BookOrganizer.ViewModels
 
 
         #endregion
+        #region DeleteBookCommand
+        private DelegateCommand<int> deleteBookCommand;
+        public ICommand DeleteBookCommand
+        {
+            get
+            {
+                if (deleteBookCommand == null)
+                {
+                    deleteBookCommand = new DelegateCommand<int>(DeleteBook);
+                }
+                return deleteBookCommand;
+            }
+        }
+
+        private void DeleteBook(int id)
+        {
+            //try
+
+            {
+                using (var c = new Context())
+                {
+                    c.Books.Remove(c.Books.First(p => p.Id == id));
+                    c.SaveChanges();
+                }
+
+                OpenList(selectedMode);
+
+            }
+            //catch { }
+        }
+        #endregion
+        #region EditBookCommand
+        private DelegateCommand<int> editBookCommand;
+        public ICommand EditBookCommand
+        {
+            get
+            {
+                if (editBookCommand == null)
+                {
+                    editBookCommand = new DelegateCommand<int>(EditBook);
+                }
+                return editBookCommand;
+            }
+        }
+
+        private void EditBook(int id)
+        {
+            // try
+            {
+                using (var c = new Context())
+                {
+                    var bookForEdit = c.Books.First(p => p.Id == id);
+                    var v = new AddBookView();
+                    v.DataContext = new AddBookViewModel(bookForEdit);
+                    c.Books.Remove(c.Books.First(p => p.Id == id));
+                    c.SaveChanges();
+
+                    ((AddBookViewModel)v.DataContext).BookOut += () =>
+                    {
+                        OpenList(selectedMode);
+                        v.Close();
+                    };
+                    v.Show();
+                }
+            }
+            // catch { }
+        }
 
 
+
+        #endregion
+
+    }
+    public class UndoRedoAction
+    {
+        
     }
 }

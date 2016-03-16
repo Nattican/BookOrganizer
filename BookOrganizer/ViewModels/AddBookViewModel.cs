@@ -132,9 +132,9 @@ namespace BookOrganizer.ViewModels
                     case 0:
                         AfterRead = true; break;
                     case 1:
-                        AfterRead = false; break;
+                        AfterRead = false;Comment = "";Mark = 0; FinishTime = null; break;
                     case 2:
-                        AfterRead = false; break;
+                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
                 }
                 OnPropertyChanged("SelectedMode");
             }
