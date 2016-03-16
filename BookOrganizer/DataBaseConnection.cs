@@ -12,7 +12,8 @@ namespace BookOrganizer
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
 
-        public Context() : base("BookOrganiser") { }
+        //public Context() : base("BookOrganiser") { }
+
     }
 
     public class Book

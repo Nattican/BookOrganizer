@@ -119,38 +119,14 @@ namespace BookOrganizer.ViewModels
         {
             var v = new AddBookView();
             v.DataContext = new AddBookViewModel();
-            ((AddBookViewModel)v.DataContext).BookOut += o =>
-            {
-                using (var c = new Context())
-                {
-                    if (o.Genre != null)
-                    {
-                        var genres = c.Genres
-                            .Where(e => e.Name == o.Genre.Name);
-
-
-                        if (genres != null) { o.Genre = genres.First(); c.Books.Add(o); }
-                        else
-                        {
-                            c.Books.Add(o);
-                        }
-                    }
-                    else { c.Books.Add(o); }
-                    c.SaveChanges();
-                    OpenList(selectedMode);
-                    v.Close();
-                }
-            };
+            ((AddBookViewModel)v.DataContext).BookOut += () =>
+             {
+                 OpenList(selectedMode);
+                 v.Close();
+             };
             v.Show();
         }
 
-        private void AddingNewBook(Book obj)
-        {
-            using (var c = new Context())
-            {
-
-            }
-        }
 
 
         #endregion

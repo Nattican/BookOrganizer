@@ -154,7 +154,7 @@ namespace BookOrganizer.ViewModels
             }
         }
         #endregion
-        public Action<Book> BookOut;
+        public Action BookOut;
         #region Constructor
 
         public AddBookViewModel(Book book)
@@ -168,6 +168,7 @@ namespace BookOrganizer.ViewModels
             {
                 Genres = c.Genres.ToList();
             }
+
             book = new Book() { Title = title, Author = author, Year = int.Parse(year), Pages = pages };
         }
 
@@ -189,7 +190,21 @@ namespace BookOrganizer.ViewModels
 
         private void Submit()
         {
-            if (BookOut != null) { BookOut(book); }
+            using (var c = new Context())
+            {
+                if (book.Genre != null)
+                {
+                    var genres = c.Genres
+                        .Where(e => e.Name == book.Genre.Name);
+
+
+                    if (genres != null) { book.Genre = genres.First();}
+                }
+                c.Books.Add(book); 
+                c.SaveChanges();
+            }
+
+            if (BookOut != null) { BookOut(); }
         }
 
         #endregion

@@ -60,13 +60,52 @@
                                         Header="Автор"                                                                                  
                                         Binding="{Binding .Author}"/>
                     <DataGridTextColumn
-                                        Header="Год написания"                                                                                  
+                                        Header="Год"                                                                                  
                                         Binding="{Binding .Year}"/>
                     <DataGridTextColumn
                                         Header="Жанр"                                                                                  
-                                        Binding="{Binding .Genre}"/>
+                                        Binding="{Binding .Genre}" />
+                    <DataGridTextColumn
+                                        Header="Страницы"                                                                                  
+                                        Binding="{Binding .Pages}"/>
+                    <DataGridTextColumn
+                                        Header="Аннотация"                                                                                  
+                                        Binding="{Binding .Annotation}"/>
+                    <DataGridTextColumn
+                                        Header="Начало"                                                                                  
+                                        Binding="{Binding .StartTime}"/>
+                    <DataGridTextColumn
+                                        Header="Конец"                                                                                  
+                                        Binding="{Binding .FinishTime}"/>
+                    <DataGridTextColumn
+                                        Header="Комментарий"                                                                                  
+                                        Binding="{Binding .Comment}"/>
+                    <DataGridTextColumn
+                                        Header="Оценка"                                                                                  
+                                        Binding="{Binding .Mark}"/>
+
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Background="Transparent" Height="20" Width="20" Command="{Binding EditBookCommand}" CommandParameter="{Binding .Id}">
+                                    <Image Source="C:\Users\shmik\Desktop\BookOrganizer\BookOrganizer\edit.png"/>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn>
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Background="Transparent" Height="20" Width="20" Command="{Binding DeleteBookCommand}" CommandParameter="{Binding .Id}">
+                                    <Image Source="C:\Users\shmik\Desktop\BookOrganizer\BookOrganizer\exit.png"/>
+                                </Button>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+
                 </DataGrid.Columns>
             </DataGrid>
+
 
 
             <Grid Grid.Column="1" x:Name = "MyTicks" Margin="10 3 10 0" HorizontalAlignment="Left" Width="600" VerticalAlignment="Top">
