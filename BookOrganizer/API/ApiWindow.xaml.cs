@@ -34,7 +34,15 @@ namespace BookOrganizer.API
                     var selectedBook = (Book)dataGrid2.SelectedItem;
                     var v = new AddBookView();
                     v.DataContext = new AddBookViewModel(selectedBook.Author, selectedBook.Name, selectedBook.Year, int.Parse(selectedBook.Pages));
-                    ((AddBookViewModel)v.DataContext).BookOut += v.Close;
+                    ((AddBookViewModel)v.DataContext).BookOut += (b) =>
+                    {
+                        using (var c = new Context())
+                        {
+                            c.Books.Add(b);
+                            c.SaveChanges();
+                        }
+                        v.Close();
+                    };
                     v.Show();
                 }
             }
@@ -132,7 +140,7 @@ namespace BookOrganizer.API
                         Result1(b.Book);
                     }
                 }
-                catch (Exception ex) { MessageBox.Show("An error occured: " + ex.Message);MessageBox.Show("Возможно у вас отсутствует Интернет соединение!"); }
+                catch (Exception ex) { MessageBox.Show("An error occured: " + ex.Message); MessageBox.Show("Возможно у вас отсутствует Интернет соединение!"); }
             });
             await task;
         }

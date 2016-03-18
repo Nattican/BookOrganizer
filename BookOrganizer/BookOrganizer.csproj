@@ -40,12 +40,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -75,13 +75,13 @@
       <DependentUpon>ApiWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="API\API_Data.cs" />
-    <Compile Include="Migrations\201603120951158_InitialCreate.cs" />
-    <Compile Include="Migrations\201603120951158_InitialCreate.Designer.cs">
-      <DependentUpon>201603120951158_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\201603181421187_first.cs" />
+    <Compile Include="Migrations\201603181421187_first.Designer.cs">
+      <DependentUpon>201603181421187_first.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\201603120954020_2nd.cs" />
-    <Compile Include="Migrations\201603120954020_2nd.Designer.cs">
-      <DependentUpon>201603120954020_2nd.cs</DependentUpon>
+    <Compile Include="Migrations\201603181509471_11111.cs" />
+    <Compile Include="Migrations\201603181509471_11111.Designer.cs">
+      <DependentUpon>201603181509471_11111.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="ViewModels\AddBookViewModel.cs" />
@@ -91,15 +91,15 @@
     <Compile Include="Views\AddBookView.xaml.cs">
       <DependentUpon>AddBookView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Commands\CommandReference.cs" />
     <Compile Include="Commands\DelegateCommand.cs" />
+    <Compile Include="Views\MainView.xaml.cs">
+      <DependentUpon>MainView.xaml</DependentUpon>
+    </Compile>
     <Page Include="API\ApiWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -109,8 +109,8 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -127,11 +127,11 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Migrations\201603120951158_InitialCreate.resx">
-      <DependentUpon>201603120951158_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201603181421187_first.resx">
+      <DependentUpon>201603181421187_first.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\201603120954020_2nd.resx">
-      <DependentUpon>201603120954020_2nd.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\201603181509471_11111.resx">
+      <DependentUpon>201603181509471_11111.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -146,7 +146,9 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="exit.png" />
+    <Resource Include="exit.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="edit.png" />

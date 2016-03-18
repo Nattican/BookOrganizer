@@ -20,7 +20,7 @@
         <Grid Grid.Row="1" Margin="10">
             <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5 -10 0 0 ">
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Автор книги" FontSize="13"/>
-                <TextBox x:Name="AuthorBox" Text="{Binding Author, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Height="26" Width="130"/>
+                <ComboBox x:Name="AuthorBox" FontSize="16" Height="26" Width="130" SelectedItem="{Binding Author, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Authors}" DisplayMemberPath="Name"/>
             </DockPanel>
             <DockPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0 0 0 40">
                 <TextBox x:Name="TitleBox" ToolTip="Название книги" MaxWidth="600" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Top" FontSize="25" Height="40"/>

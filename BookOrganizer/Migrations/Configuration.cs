@@ -10,7 +10,6 @@ namespace BookOrganizer.Migrations
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            ContextKey = "BookOrganizer.Context";
         }
 
         protected override void Seed(BookOrganizer.Context context)

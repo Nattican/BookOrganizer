@@ -13,13 +13,19 @@ namespace BookOrganizer.ViewModels
         #region Book object with public methods
         private Book book;
         private List<Genre> genres;
+        private List<Author> authors;
 
+        public List<Author> Authors
+        {
+            get { return authors; }
+            set { authors = value; OnPropertyChanged("Authors"); }
+        }
         public List<Genre> Genres
         {
             get { return genres; }
             set { genres = value; OnPropertyChanged("Genres"); }
         }
-        public string Author
+        public Author Author
         {
             get { return book.Author; }
             set
@@ -132,7 +138,7 @@ namespace BookOrganizer.ViewModels
                     case 0:
                         AfterRead = true; break;
                     case 1:
-                        AfterRead = false;Comment = "";Mark = 0; FinishTime = null; break;
+                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
                     case 2:
                         AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
                 }
@@ -154,12 +160,17 @@ namespace BookOrganizer.ViewModels
             }
         }
         #endregion
-        public Action BookOut;
+        public Action<Book> BookOut;
         #region Constructor
 
         public AddBookViewModel(Book book)
         {
             this.book = book;
+            using (var c = new Context())
+            {
+                Genres = c.Genres.ToList();
+                Authors = c.Authors.ToList();
+            }
             //hello, logic of changing existing item
         }
         public AddBookViewModel(string author = "", string title = "", string year = "0", int pages = 0)
@@ -167,9 +178,9 @@ namespace BookOrganizer.ViewModels
             using (var c = new Context())
             {
                 Genres = c.Genres.ToList();
+                Authors = c.Authors.ToList();
             }
-
-            book = new Book() { Title = title, Author = author, Year = int.Parse(year), Pages = pages };
+            book = new Book() { Title = title, Author = new Author() { Name = author }, Year = int.Parse(year), Pages = pages };
         }
 
         #endregion
@@ -190,21 +201,7 @@ namespace BookOrganizer.ViewModels
 
         private void Submit()
         {
-            using (var c = new Context())
-            {
-                if (book.Genre != null)
-                {
-                    var genres = c.Genres
-                        .Where(e => e.Name == book.Genre.Name);
-
-
-                    if (genres != null) { book.Genre = genres.First();}
-                }
-                c.Books.Add(book); 
-                c.SaveChanges();
-            }
-
-            if (BookOut != null) { BookOut(); }
+            if (BookOut != null) { BookOut(book); }
         }
 
         #endregion
