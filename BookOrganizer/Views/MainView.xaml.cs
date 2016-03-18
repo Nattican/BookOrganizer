@@ -23,7 +23,6 @@ namespace BookOrganizer.Views
         public MainView()
         {
             InitializeComponent();
-           
         }
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
@@ -31,6 +30,15 @@ namespace BookOrganizer.Views
             ApiWindow api = new ApiWindow();
             api.Show();
         }
+
+        private void Button_Switch_Mode(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+
+        
 
     }
 }
