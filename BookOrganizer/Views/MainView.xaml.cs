@@ -33,7 +33,7 @@ namespace BookOrganizer.Views
 
         private void Button_Switch_Mode(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
 
