@@ -90,7 +90,10 @@
                       Height="360" Width="513" Margin="-9,64,129,0" 
                       Background="#FF3E3E42"  Foreground="White" 
                       BorderThickness="0" BorderBrush="{x:Null}"
-                      GridLinesVisibility="Horizontal" SelectionMode="Single"
+                      GridLinesVisibility="Horizontal" 
+                      HorizontalGridLinesBrush="#FFCCE4EF"
+                      SelectionMode="Single"
+                      
                       AutoGenerateColumns="False"
                       ItemsSource="{Binding CurrentList}"
                       VerticalAlignment="Top" HorizontalAlignment="Left"
@@ -99,6 +102,8 @@
                       CanUserReorderColumns="True" CanUserResizeColumns="False" RowBackground="#FF3E3E42" FontFamily="Century Gothic" FontSize="14"
                       SelectedItem="{Binding SelectedBook, UpdateSourceTrigger=PropertyChanged}"
                       >
+                
+                
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -117,36 +122,28 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Header="Название" 
-                        Width="170"
+                        Width="160"
                         Binding="{Binding .Title}">
 
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Header="Автор"     
-                        Width="150"
+                        Width="160"
                         Binding="{Binding .Author.Name}"/>
                     <DataGridTextColumn
                         Header="Жанр"       
-                        Width="140"
+                        Width="150"
                         Binding="{Binding .Genre.Name}" />
-                    <DataGridTemplateColumn Width="30">
+                    <DataGridTemplateColumn Width="50">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button BorderThickness="0" Background="Transparent" Height="20" Width="20" Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .Id}">
-                                    <Image Source="../logo_learn_more.png"/>
+                                    <Image Source="../logo_edit_blue.png"/>
                                 </Button>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
-                    <DataGridTemplateColumn>
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Background="Transparent" Height="20" Width="20" Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .Id}">
-                                    <Image Source="../exit.png"/>
-                                </Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                   
                 </DataGrid.Columns>
             </DataGrid>
             <ContentControl Content="{Binding SelectedBook}">
@@ -180,6 +177,20 @@
                             <TextBlock Name="CommentBlock" Text="{Binding .Comment}" Margin="125,260,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
 
                             <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Background="#FF139EE0" Foreground="White" Width="277" Height="17" FontFamily="Century Gothic" FontSize="14"><Run Text="Описание"/><LineBreak/><Run/></TextBlock>
+
+                            <Button Background="Transparent" Height="20" Width="20" 
+                                    Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Margin="240,320,0,0"
+                                    BorderBrush="Transparent" Cursor="Hand" >
+                                <Image Source="../logo_trash_bin.png"/>
+                            </Button>
+
+                            <Button Background="Transparent" Height="20" Width="30" 
+                                    Margin="180,320,0,0"
+                                    BorderBrush="Transparent" Cursor="Hand" >
+                                <Image Source="../logo_edit_blue.png"/>
+                            </Button>
+
                         </Grid>
                     </DataTemplate>
                 </ContentControl.ContentTemplate>
