@@ -141,7 +141,7 @@
                     <DataGridTemplateColumn>
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <Button Background="Transparent" Height="20" Width="20" Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .Id}">
+                                <Button Background="Transparent" Height="20" Width="20" Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}">
                                     <Image Source="../exit.png"/>
                                 </Button>
                             </DataTemplate>

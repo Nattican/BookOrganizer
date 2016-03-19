@@ -163,24 +163,28 @@ namespace BookOrganizer.ViewModels
         public Action<Book> BookOut;
         #region Constructor
 
-        public AddBookViewModel(Book book)
+        public AddBookViewModel(Book b)
         {
-            this.book = book;
+            book = b;
             using (var c = new Context())
             {
                 Genres = c.Genres.ToList();
                 Authors = c.Authors.ToList();
+
+                if (b.Genre != null)
+                {
+                    var g = Genres.FirstOrDefault(p => p.Name == book.Genre.Name);
+                    if (g != null) { c.Genres.Add(book.Genre); c.SaveChanges(); book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name); }
+                    Genres = c.Genres.ToList();
+                }
+
+                if (b.Author != null)
+                {
+                    var a = Authors.FirstOrDefault(p => p.Name == book.Genre.Name);
+                    if (a != null) { c.Authors.Add(book.Author); c.SaveChanges(); book.Author = Authors.FirstOrDefault(p => p.Name == book.Genre.Name); }
+                    Authors = c.Authors.ToList();
+                }
             }
-            //hello, logic of changing existing item
-        }
-        public AddBookViewModel(string author = "", string title = "", string year = "0", int pages = 0)
-        {
-            using (var c = new Context())
-            {
-                Genres = c.Genres.ToList();
-                Authors = c.Authors.ToList();
-            }
-            book = new Book() { Title = title, Author = new Author() { Name = author }, Year = int.Parse(year), Pages = pages };
         }
 
         #endregion
@@ -204,6 +208,26 @@ namespace BookOrganizer.ViewModels
             if (BookOut != null) { BookOut(book); }
         }
 
+
+        #endregion
+        #region NewAuthorCommand
+        private DelegateCommand newAuthorCommand;
+        public ICommand NewAuthorCommand
+        {
+            get
+            {
+                if (newAuthorCommand == null)
+                {
+                    newAuthorCommand = new DelegateCommand(NewAuthor);
+                }
+                return newAuthorCommand;
+            }
+        }
+
+        private void NewAuthor()
+        {
+            MessageBox.Show("");
+        }
         #endregion
     }
 }

@@ -13,6 +13,12 @@ namespace BookOrganizer.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private ObservableCollection<Book> currentList;
+        private string selectedMode = "0";
+        private Book selectedBook;
+        private string[] mode;
+        private Stack<object[]> Undos = new Stack<object[]>();
+        private Stack<object[]> Redos = new Stack<object[]>();
+
         public ObservableCollection<Book> CurrentList
         {
             get { return currentList; }
@@ -22,7 +28,6 @@ namespace BookOrganizer.ViewModels
                 OnPropertyChanged("CurrentList");
             }
         }
-        private string selectedMode = "0";
         public string SelectedMode
         {
             get { return selectedMode; }
@@ -33,18 +38,17 @@ namespace BookOrganizer.ViewModels
                 OpenList(value);
             }
         }
-        private Book selectedBook;
         public Book SelectedBook
         {
             get { return selectedBook; }
             set { selectedBook = value; OnPropertyChanged("SelectedBook"); }
         }
-        private string[] mode = new string[] { "#FFBFBFBF", "Transparent", "Transparent" };
         public string[] Mod
         {
             get { return mode; }
             set { mode = value; OnPropertyChanged("Mod"); }
         }
+
         #region Constructor
 
         public MainViewModel()
@@ -74,6 +78,7 @@ namespace BookOrganizer.ViewModels
         }
 
         #endregion
+
         #region OpenListCommand
         private DelegateCommand<string> openListCommand;
         public ICommand OpenListCommand
@@ -132,9 +137,10 @@ namespace BookOrganizer.ViewModels
         private void AddBook()
         {
             var v = new AddBookView();
-            v.DataContext = new AddBookViewModel();
+            v.DataContext = new AddBookViewModel(new Book());
             ((AddBookViewModel)v.DataContext).BookOut += (b) =>
              {
+
                  AddBookToDB(b);
                  using (var c = new Context())
                  {
@@ -146,22 +152,24 @@ namespace BookOrganizer.ViewModels
             v.Show();
         }
         #endregion
+
         #region DeleteBookCommand
-        private DelegateCommand<int> deleteBookCommand;
+        private DelegateCommand deleteBookCommand;
         public ICommand DeleteBookCommand
         {
             get
             {
                 if (deleteBookCommand == null)
                 {
-                    deleteBookCommand = new DelegateCommand<int>(DeleteBook);
+                    deleteBookCommand = new DelegateCommand(DeleteBook);
                 }
                 return deleteBookCommand;
             }
         }
 
-        private void DeleteBook(int id)
+        private void DeleteBook()
         {
+            var id = SelectedBook.Id;
             using (var c = new Context())
             {
                 Undos.Push(new object[] { "add", c.Books.Include("Author").Include("Genre").First(p => p.Id == id) });
@@ -171,6 +179,7 @@ namespace BookOrganizer.ViewModels
         }
 
         #endregion
+
         #region EditBookCommand
         private DelegateCommand<int> editBookCommand;
         public ICommand EditBookCommand
@@ -214,6 +223,50 @@ namespace BookOrganizer.ViewModels
 
         #endregion
 
+        #region UndoCommand
+        private DelegateCommand undoCommand;
+        public ICommand UndoCommand
+        {
+            get
+            {
+                if (undoCommand == null)
+                {
+                    undoCommand = new DelegateCommand(Undo);
+                }
+                return undoCommand;
+            }
+        }
+
+        private void Undo()
+        {
+            if (Undos.Count == 0) return;
+            var paramOBJ = Undos.Pop();
+            Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]));
+        }
+        #endregion
+
+        #region RedoCommand
+        private DelegateCommand redoCommand;
+        public ICommand RedoCommand
+        {
+            get
+            {
+                if (redoCommand == null)
+                {
+                    redoCommand = new DelegateCommand(Redo);
+                }
+                return redoCommand;
+            }
+        }
+
+        private void Redo()
+        {
+            if (Redos.Count == 0) return;
+            var paramOBJ = Redos.Pop();
+            Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]), true);
+        }
+        #endregion
+
         private void AddBookToDB(Book b)
         {
             using (var c = new Context())
@@ -241,57 +294,6 @@ namespace BookOrganizer.ViewModels
                 c.SaveChanges();
             }
         }
-
-        #region UndoCommand
-        private DelegateCommand undoCommand;
-        public ICommand UndoCommand
-        {
-            get
-            {
-                if (undoCommand == null)
-                {
-                    undoCommand = new DelegateCommand(Undo);
-                }
-                return undoCommand;
-            }
-        }
-
-        private void Undo()
-        {
-            if (Undos.Count == 0) return;
-            var paramOBJ = Undos.Pop();
-            Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]));
-        }
-        #endregion
-        #region RedoCommand
-        private DelegateCommand redoCommand;
-        public ICommand RedoCommand
-        {
-            get
-            {
-                if (redoCommand == null)
-                {
-                    redoCommand = new DelegateCommand(Redo);
-                }
-                return redoCommand;
-            }
-        }
-
-        private void Redo()
-        {
-            if (Redos.Count == 0) return;
-            var paramOBJ = Redos.Pop();
-            Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]), true);
-        }
-        #endregion
-
-        private Stack<object[]> Undos = new Stack<object[]>();
-        private Stack<object[]> Redos = new Stack<object[]>();
-
-
-
-
-
         public void Do(string param, Book b, bool reverse = false)
         {
             switch (param)
@@ -318,7 +320,10 @@ namespace BookOrganizer.ViewModels
                             Undos.Push(new object[] { "delete", b });
                         }
                         else
+                        {
+                            if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
                             Redos.Push(new object[] { "delete", b });
+                        }
                     }
                     break;
                 case "unedit":
@@ -330,7 +335,9 @@ namespace BookOrganizer.ViewModels
                             Undos.Push(new object[] { "edit", temp.Clone() });
                         }
                         else
+                        {
                             Redos.Push(new object[] { "edit", temp.Clone() });
+                        }
 
                         temp.PullChanges(b);
                         c.SaveChanges();
