@@ -193,27 +193,6 @@ namespace BookOrganizer.ViewModels
             }
             if (BookOut != null) { BookOut(book); }
         }
-
-
-        #endregion
-        #region NewAuthorCommand
-        private DelegateCommand newAuthorCommand;
-        public ICommand NewAuthorCommand
-        {
-            get
-            {
-                if (newAuthorCommand == null)
-                {
-                    newAuthorCommand = new DelegateCommand(NewAuthor);
-                }
-                return newAuthorCommand;
-            }
-        }
-
-        private void NewAuthor()
-        {
-            MessageBox.Show("");
-        }
         #endregion
     }
 }

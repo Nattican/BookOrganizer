@@ -19,5 +19,6 @@ namespace Tests
             Assert.AreEqual(book, obj.GetFieldOrProperty("book") as BookOrganizer.Book);
 
         }
+
     }
 }

@@ -419,6 +419,16 @@ namespace BookOrganizer.ViewModels
                             }
 
                             temp.PullChanges(b);
+                            if (temp.Author != null)
+                            {
+                                var k = c.Authors.FirstOrDefault(p => p.Name == temp.Author.Name);
+                                if (k != null) { temp.Author = k; }
+                            }
+                            if (temp.Genre != null)
+                            {
+                                var t = c.Genres.FirstOrDefault(p => p.Name == temp.Genre.Name);
+                                if (t != null) { temp.Genre = t; }
+                            }
                             c.SaveChanges();
                         }
                         break;
@@ -440,6 +450,16 @@ namespace BookOrganizer.ViewModels
                             }
 
                             temp.PullChanges(b);
+                            if (temp.Author != null)
+                            {
+                                var k = c.Authors.FirstOrDefault(p => p.Name == temp.Author.Name);
+                                if (k != null) { temp.Author = k; }
+                            }
+                            if (temp.Genre != null)
+                            {
+                                var t = c.Genres.FirstOrDefault(p => p.Name == temp.Genre.Name);
+                                if (t != null) { temp.Genre = t; }
+                            }
                             c.SaveChanges();
                         }
                         break;

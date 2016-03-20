@@ -10,7 +10,7 @@ namespace BookOrganizer
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Author> Authors { get; set; }
 
-        public Context(): base("BookOrganizer_SHOB"){}
+        public Context() : base("BookOrganizer_SHOB") { }
         //public Context() : base("Data Source=SHMIKEL-NB\\SQLExpress;Initial Catalog=BookOrganiser_H;Integrated Security=True;") { }
 
     }
@@ -46,7 +46,6 @@ namespace BookOrganizer
             other.Mark = Mark;
             return other;
         }
-
         public void PullChanges(Book other)
         {
             if (other.Title != Title) Title = other.Title;
@@ -60,19 +59,57 @@ namespace BookOrganizer
             if (other.Comment != Comment) Comment = other.Comment;
             if (other.Mark != Mark) Mark = other.Mark;
         }
+        public override bool Equals(object obj)
+        {
+            try
+            {
+                var o = (Book)obj;
+                bool res =
+                    Title == o.Title &&
+                    (Author == null && o.Author == null ? true : Author.Equals(o.Author)) &&
+                    Year == o.Year &&
+                    (Genre == null && o.Genre == null ? true : Genre.Equals(o.Genre)) &&
+                    Pages == o.Pages &&
+                    Annotation == o.Annotation &&
+                    StartTime == o.StartTime &&
+                    FinishTime == o.FinishTime &&
+                    Comment == o.Comment &&
+                    Mark == o.Mark;
+                return res;
+            }
+            catch { return base.Equals(obj); }
+        }
     }
-    public class Genre
+    public class Genre : Object
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (this == null && obj == null) { return true; }
+            else { return this.GetHashCode() == ((Genre)obj).GetHashCode(); }
+        }
+        public override int GetHashCode()
+        {
+            return Id + Name.GetHashCode();
+        }
     }
 
-    public class Author
+    public class Author : Object
     {
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
+        public override bool Equals(object obj)
+        {
+            if (this == null && obj == null) { return true; }
+            else { return this.GetHashCode() == ((Author)obj).GetHashCode(); }
+        }
+        public override int GetHashCode()
+        {
+            return Id + Name.GetHashCode();
+        }
     }
     public static class DB
     {
