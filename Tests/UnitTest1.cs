@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BookOrganizer.Views;
 using BookOrganizer.ViewModels;
+using BookOrganizer;
 
 namespace Tests
 {
