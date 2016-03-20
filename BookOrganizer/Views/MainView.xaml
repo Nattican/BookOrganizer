@@ -4,6 +4,7 @@
     xmlns:c="clr-namespace:BookOrganizer.Commands" 
     xmlns:s ="clr-namespace:BookOrganizer.ViewModels"
         Title="Book Organizer" 
+        Icon="/BookOrganizer;component/logo_bookOrg_transp.png"
         Background="#FFEBEBEB" BorderBrush="#FF0796A2"
         Height="470.5" Width="787" WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
 
@@ -69,7 +70,6 @@
                         </ControlTemplate>
                     </Button.Template>
                 </Button>
-
                 <Button Command="{Binding OpenListCommand}" CommandParameter="2" x:Name="WishList" HorizontalAlignment="Left" VerticalAlignment="Top" Height="13" Width="13" Margin="388,25,0,0" BorderBrush="#FF139EE0" Foreground="#FF139EE0" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
@@ -94,7 +94,6 @@
                       HorizontalGridLinesBrush="#FFCCE4EF"
                       SelectionMode="Single"
                       
-                      
                       AutoGenerateColumns="False"
                       ItemsSource="{Binding CurrentList}"
                       VerticalAlignment="Top" HorizontalAlignment="Left"
@@ -103,6 +102,8 @@
                       CanUserReorderColumns="True" CanUserResizeColumns="False" RowBackground="#FF3E3E42" FontFamily="Century Gothic" FontSize="14"
                       SelectedItem="{Binding SelectedBook, UpdateSourceTrigger=PropertyChanged}"
                       >
+                
+                
 
                 <DataGrid.Resources>
                     <Style TargetType="{x:Type DataGridColumnHeader}">
@@ -139,7 +140,7 @@
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
-                    <DataGridTextColumn 
+                    <DataGridTextColumn
                         Header="Жанр"       
                         Width="150"
                         Binding="{Binding .Genre.Name}">

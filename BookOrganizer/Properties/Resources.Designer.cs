@@ -59,15 +59,5 @@ namespace BookOrganizer.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap logo_learn_more {
-            get {
-                object obj = ResourceManager.GetObject("logo_learn_more", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }
