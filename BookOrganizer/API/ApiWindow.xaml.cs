@@ -27,13 +27,15 @@ namespace BookOrganizer.API
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            try// на случай пустой строки
+            try// на случай пустой или битой строки
             {
                 if (dataGrid2.SelectedItem != null)
                 {
                     var selectedBook = (Book)dataGrid2.SelectedItem;
+                    var tempBook = new BookOrganizer.Book() { Title = selectedBook.Name, Annotation = selectedBook.Annotation, Author = new Author() { Name = selectedBook.Author }, Year = int.Parse(selectedBook.Year), Pages = int.Parse(selectedBook.Pages) };
+
                     var v = new AddBookView();
-                    v.DataContext = new AddBookViewModel(selectedBook.Author, selectedBook.Name, selectedBook.Year, int.Parse(selectedBook.Pages));
+                    v.DataContext = new AddBookViewModel(tempBook);
                     ((AddBookViewModel)v.DataContext).BookOut += (b) =>
                     {
                         using (var c = new Context())
@@ -55,7 +57,6 @@ namespace BookOrganizer.API
             if (s == "") return;
             searchBox.Text = "";
 
-            listBox1.Items.Clear();
             try
             {
                 bb = new List<Book>();
@@ -115,7 +116,6 @@ namespace BookOrganizer.API
                 default: s = "2"; break;
             }
             await AddItems(s);
-            if (listBox1.Items.Count != 0) listBox1.Items.Clear();
             dataGrid2.ItemsSource = bb;
         }
 

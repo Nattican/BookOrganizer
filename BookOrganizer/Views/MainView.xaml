@@ -17,25 +17,22 @@
         <KeyBinding Key="Q" Modifiers="Control" Command="{StaticResource ExitCommandReference}" />
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
+        <KeyBinding Key="L" Modifiers="Control" Command="{Binding OpenLibraryCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding AddBookCommand}"/>
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EditBookCommand}"/>
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding DeleteBookCommand}"/>
     </Window.InputBindings>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Сохранить..." InputGestureText="Ctrl-S"/>
+                <MenuItem Header="Библиотека" Command="{Binding OpenLibraryCommand}" InputGestureText="Ctrl-L"/>
                 <Separator/>
-                <MenuItem Header="Библиотека"/>
-                <!--Все списки в одном-->
+                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="Править">
                 <MenuItem Header="Отменить" InputGestureText="Ctrl-Z" Command="{Binding UndoCommand}"/>
                 <MenuItem Header="Повторить" InputGestureText="Ctrl-Y" Command="{Binding RedoCommand}"/>
-            </MenuItem>
-            <MenuItem Header="Что бы почитать?" Click="MenuItem_Click"/>
-            <MenuItem Header="BookOrganizer" >
-                <MenuItem IsEnabled="False" Header="О программе..." InputGestureText="Ctrl-O"/>
-                <MenuItem IsEnabled="False" Header="Настройки..." InputGestureText="Ctrl-N"/>
-                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
         </Menu>
 
@@ -45,14 +42,14 @@
                   Height="64" Width="781" >
                 <TextBlock Text="Прочитано" FontSize="14" Foreground="#FF3E3E42" FontFamily="Century Gothic" FontWeight="Bold" Margin="77,3,455,26" Height="35"  />
                 <TextBlock Text="Читаю сейчас" FontSize="14" Foreground="#FF3E3E42" FontFamily="Century Gothic" FontWeight="Bold" Margin="207,3,301,39"/>
-                <TextBlock Text="Вишлист" FontSize="14" Foreground="#FF3E3E42" FontFamily="Century Gothic" FontWeight="Bold"  Margin="367,3,177,26" Height="35" RenderTransformOrigin="0.511,0.5"/>
+                <TextBlock Text="В планах" FontSize="14" Foreground="#FF3E3E42" FontFamily="Century Gothic" FontWeight="Bold"  Margin="367,3,177,26" Height="35" RenderTransformOrigin="0.511,0.5"/>
 
 
                 <Button Command="{Binding OpenListCommand}" CommandParameter="0" Name="ReadBooks" HorizontalAlignment="Left" VerticalAlignment="Top" Height="13" Width="13" Margin="112,25,0,0" BorderBrush="#FF139EE0" Foreground="#FF139EE0" Cursor="Hand">
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid>
-                                <Ellipse Name="readBooks" Stroke="#FFBFBFBF" StrokeThickness="1" Fill="{Binding Mod[0]}"/>
+                                <Ellipse Name="readBooks" Stroke="#FFBFBFBF" StrokeThickness="1" Fill="{Binding MyRadioButtons[0]}"/>
                                 <ContentPresenter HorizontalAlignment="Center"
                 					VerticalAlignment="Center"/>
                             </Grid>
@@ -63,7 +60,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid>
-                                <Ellipse Name="readingNow" Stroke="#FFBFBFBF" StrokeThickness="1" Fill="{Binding Mod[1]}"/>
+                                <Ellipse Name="readingNow" Stroke="#FFBFBFBF" StrokeThickness="1" Fill="{Binding MyRadioButtons[1]}"/>
                                 <ContentPresenter HorizontalAlignment="Center"
                 					VerticalAlignment="Center"/>
                             </Grid>
@@ -74,7 +71,7 @@
                     <Button.Template>
                         <ControlTemplate TargetType="{x:Type Button}">
                             <Grid x:Name="WishListGrid">
-                                <Ellipse x:Name="wishList" Stroke="#FFBFBFBF" StrokeThickness="0.8" Fill="{Binding Mod[2]}"/>
+                                <Ellipse x:Name="wishList" Stroke="#FFBFBFBF" StrokeThickness="0.8" Fill="{Binding MyRadioButtons[2]}"/>
                                 <ContentPresenter HorizontalAlignment="Center"
                 					VerticalAlignment="Center"/>
                             </Grid>
@@ -93,7 +90,6 @@
                       GridLinesVisibility="Horizontal" 
                       HorizontalGridLinesBrush="#FFCCE4EF"
                       SelectionMode="Single"
-                      
                       AutoGenerateColumns="False"
                       ItemsSource="{Binding CurrentList}"
                       VerticalAlignment="Top" HorizontalAlignment="Left"
@@ -122,28 +118,39 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Header="Название" 
-                        Width="160"
-                        Binding="{Binding .Title}"/>
+                        Width="210"
+                        
+                        Binding="{Binding .Title}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="Padding" Value="5 0 0 0"/>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn
                         Header="Автор"     
                         Width="150"
-                        Binding="{Binding .Author.Name}"/>
+                        Binding="{Binding .Author.Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                     <DataGridTextColumn
                         Header="Жанр"       
-                        Width="140"
-                        Binding="{Binding .Genre.Name}" />
-                    <DataGridTemplateColumn Width="50">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button BorderThickness="0" Background="Transparent" Height="20" Width="20" Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding .Id}">
-                                    <Image Source="../logo_edit_blue.png"/>
-                                </Button>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>               
+                        Width="130"
+                        Binding="{Binding .Genre.Name}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="HorizontalAlignment" Value="Center" />
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
                 </DataGrid.Columns>
             </DataGrid>
-            <ContentControl Content="{Binding SelectedBook}" Margin="0,0,0,0">
+            <ContentControl Content="{Binding SelectedBook}">
                 <ContentControl.ContentTemplate>
                     <DataTemplate>
                         <Grid HorizontalAlignment="Left" Height="360" Margin="504,64,0,0" VerticalAlignment="Top" Width="277" Background="#FF3E3E42">
@@ -159,31 +166,34 @@
                             <TextBlock Name="AnnotationBlockHeader" Text="Аннотация: " Margin="10,205,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FF139EE0" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="CommentBlockHeader" Text="Комментарий: " Margin="10,260,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FF139EE0" FontFamily="Century Gothic" FontSize="14"/>
 
-                            <TextBlock Name="TitleBlock" Text="{Binding .Title}" Margin="90,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBlock Name="TitleBlock" Text="{Binding .Title}" ToolTip="{Binding .Title}" MaxWidth="175" Margin="90,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="AuthorBlock" Text="{Binding .Author.Name}" Margin="62,50,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="GenreBlock" Text="{Binding .Genre.Name}" Margin="62,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="YearBlock" Text="{Binding .Year}" Margin="45,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="PagesNumberBlock" Text="{Binding .Pages}" Margin="130,130,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="MarkBlock" Text="{Binding .Mark}" Margin="105,150,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            <StackPanel Orientation="Horizontal" Name="ReadingPeriodBlock" Margin="150,170,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                <TextBlock Name="Start" Text="{Binding .StartTime}"  Margin="0" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                                <TextBlock Text=" - " Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                                <TextBlock Name="Finish" Text="{Binding .FinishTime}"  Margin="0"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            </StackPanel>
-                            <TextBlock Name="AnnotationBlock" Text="{Binding .Annotation}" Margin="95,205,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            <TextBlock Name="CommentBlock" Text="{Binding .Comment}" Margin="125,260,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBlock Name="ReadingPeriodBlock" Margin="80,186,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding DataContext.TimePeriod, RelativeSource={RelativeSource AncestorType=Window}}" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBox Name="AnnotationBlock" Text="{Binding .Annotation}" Margin="95,205,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14" Height="50" Background="Transparent" BorderThickness="0"/>
+                            <TextBox Name="CommentBlock" Text="{Binding .Comment}" Margin="125,260,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14" Height="55" Background="Transparent" BorderThickness="0"/>
 
                             <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Background="#FF139EE0" Foreground="White" Width="277" Height="17" FontFamily="Century Gothic" FontSize="14"><Run Text="Описание"/><LineBreak/><Run/></TextBlock>
 
-                            <Button Background="Transparent" Height="20" Width="20" 
+                            <Button Background="Transparent" Height="30" Width="30" 
                                     Command="{Binding DataContext.DeleteBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Margin="240,320,0,0"
-                                    BorderBrush="Transparent" Cursor="Hand" >
+                                    Margin="10"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
+                                    BorderBrush="Transparent" Cursor="Hand" 
+                                    >
+
                                 <Image Source="../logo_trash_bin.png"/>
                             </Button>
 
-                            <Button Background="Transparent" Height="20" Width="30" 
-                                    Margin="180,320,0,0"
+                            <Button Background="Transparent" Height="30" Width="30" 
+                                    Command="{Binding DataContext.EditBookCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                                    Margin=" 0 0 50 10" Padding="-3 -1 -3 -5" 
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Bottom"
                                     BorderBrush="Transparent" Cursor="Hand" >
                                 <Image Source="../logo_edit_blue.png"/>
                             </Button>

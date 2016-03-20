@@ -12,25 +12,29 @@ namespace BookOrganizer.ViewModels
     {
         #region Book object with public methods
         private Book book;
-        private List<Genre> genres;
-        private List<Author> authors;
+        private List<string> genres;
+        private List<string> authors;
 
-        public List<Author> Authors
+        public List<string> Authors
         {
             get { return authors; }
             set { authors = value; OnPropertyChanged("Authors"); }
         }
-        public List<Genre> Genres
+        public List<string> Genres
         {
             get { return genres; }
             set { genres = value; OnPropertyChanged("Genres"); }
         }
-        public Author Author
+
+        private string stringAuthor;
+        private string stringGenre;
+
+        public string Author
         {
-            get { return book.Author; }
+            get { return stringAuthor; }
             set
             {
-                book.Author = value;
+                stringAuthor = value;
                 OnPropertyChanged("Author");
             }
         }
@@ -88,12 +92,12 @@ namespace BookOrganizer.ViewModels
                 OnPropertyChanged("StartTime");
             }
         }
-        public Genre Genre
+        public string Genre
         {
-            get { return book.Genre; }
+            get { return stringGenre; }
             set
             {
-                book.Genre = value;
+                stringGenre = value;
                 OnPropertyChanged("Genre");
             }
         }
@@ -125,62 +129,28 @@ namespace BookOrganizer.ViewModels
             }
         }
         #endregion
+
         #region visual properties
-        private int selectedMode = 0;
-        public int SelectedMode
-        {
-            get { return selectedMode; }
-            set
-            {
-                selectedMode = value;
-                switch (value)
-                {
-                    case 0:
-                        AfterRead = true; break;
-                    case 1:
-                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
-                    case 2:
-                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
-                }
-                OnPropertyChanged("SelectedMode");
-            }
-        }
+
         public int[] AvailableMarks
         {
             get
             { return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; }
         }
-        private bool afterRead = true;
-        public bool AfterRead
-        {
-            get { return afterRead; }
-            set
-            {
-                afterRead = value; OnPropertyChanged("AfterRead");
-            }
-        }
         #endregion
         public Action<Book> BookOut;
         #region Constructor
 
-        public AddBookViewModel(Book book)
+        public AddBookViewModel(Book b)
         {
-            this.book = book;
+            book = b;
+            stringAuthor = book.Author == null ? null : book.Author.Name;
+            stringGenre = book.Genre == null ? null : book.Genre.Name;
             using (var c = new Context())
             {
-                Genres = c.Genres.ToList();
-                Authors = c.Authors.ToList();
+                Genres = new List<string>(c.Genres.ToList().Select(p => p.Name));
+                Authors = new List<string>(c.Authors.ToList().Select(p => p.Name));
             }
-            //hello, logic of changing existing item
-        }
-        public AddBookViewModel(string author = "", string title = "", string year = "0", int pages = 0)
-        {
-            using (var c = new Context())
-            {
-                Genres = c.Genres.ToList();
-                Authors = c.Authors.ToList();
-            }
-            book = new Book() { Title = title, Author = new Author() { Name = author }, Year = int.Parse(year), Pages = pages };
         }
 
         #endregion
@@ -201,9 +171,49 @@ namespace BookOrganizer.ViewModels
 
         private void Submit()
         {
+            using (var c = new Context())
+            {
+                var a = c.Authors.FirstOrDefault(p => p.Name == Author);
+                if (a == null)
+                {
+                    c.Authors.Add(new Author() { Name = Author });
+                    c.SaveChanges();
+                    book.Author = c.Authors.First(p => p.Name == Author);
+                }
+                else { book.Author = a; }
+
+                var g = c.Genres.FirstOrDefault(p => p.Name == Genre);
+                if (g == null)
+                {
+                    c.Genres.Add(new Genre() { Name = Genre });
+                    c.SaveChanges();
+                    book.Genre = c.Genres.First(p => p.Name == Genre);
+                }
+                else { book.Genre = g; }
+            }
             if (BookOut != null) { BookOut(book); }
         }
 
+
+        #endregion
+        #region NewAuthorCommand
+        private DelegateCommand newAuthorCommand;
+        public ICommand NewAuthorCommand
+        {
+            get
+            {
+                if (newAuthorCommand == null)
+                {
+                    newAuthorCommand = new DelegateCommand(NewAuthor);
+                }
+                return newAuthorCommand;
+            }
+        }
+
+        private void NewAuthor()
+        {
+            MessageBox.Show("");
+        }
         #endregion
     }
 }
