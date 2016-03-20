@@ -81,7 +81,15 @@ namespace BookOrganizer.API
                     if (b.Book.Name.Length > 50) b.Book.Name = b.Book.Name.Substring(0, 50) + "...";
                     Result1(b.Book);
                 }
-                dataGrid2.ItemsSource = bb;
+                if (bb.Count>0)
+                {
+                    dataGrid2.ItemsSource = bb;
+                }
+                else
+                {
+                    MessageBox.Show("Поиск не дал результатов");
+                }
+                
             }
             catch (Exception ex) { MessageBox.Show("An error occured: " + ex.Message); }
         }

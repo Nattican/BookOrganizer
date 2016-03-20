@@ -134,7 +134,7 @@
                         Binding="{Binding .Author.Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
@@ -144,7 +144,7 @@
                         Binding="{Binding .Genre.Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
@@ -168,7 +168,7 @@
 
                             <TextBlock Name="TitleBlock" Text="{Binding .Title}" ToolTip="{Binding .Title}" MaxWidth="175" MaxHeight="35" Margin="90,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="NoWrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="AuthorBlock" Text="{Binding .Author.Name}" ToolTip="{Binding .Author.Name}" MaxHeight="35" MaxWidth="203" Margin="62,50,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            <TextBlock Name="GenreBlock" Text="{Binding .Genre.Name}" Margin="62,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBlock Name="GenreBlock" Text="{Binding .Genre.Name}" ToolTip="{Binding .Genre.Name}" MaxWidth="203" MaxHeight="35" Margin="62,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="YearBlock" Text="{Binding .Year}" Margin="45,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="PagesNumberBlock" Text="{Binding .Pages}" Margin="130,130,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="MarkBlock" Text="{Binding .Mark}" Margin="105,150,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
