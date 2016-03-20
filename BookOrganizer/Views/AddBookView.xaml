@@ -35,7 +35,7 @@
             <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,80,0,0">
                 <TextBlock Text="Автор" Margin="20,15" FontFamily="Century Gothic" FontSize="14" FontWeight="Bold"/>
                 <toolkit:AutoCompleteBox 
-                        x:Name="AuthorBox" Margin="8,12,0,0" MaxWidth="600" MinWidth="200"
+                        x:Name="AuthorBox" Margin="8,12,0,0" MaxWidth="260" MinWidth="200"
                         FontFamily="Century Gothic" FontSize="14" Height="23"
                         DockPanel.Dock="Top" Foreground="#FF3E3E42"
                         Text="{Binding Author, Mode=TwoWay}"
@@ -48,7 +48,7 @@
             <DockPanel  HorizontalAlignment="Left" VerticalAlignment="Top" Margin="30,130,0,0">
                 <TextBlock  Text="Жанр" Margin="20,15" FontFamily="Century Gothic" FontSize="14" FontWeight="Bold"/>
                 <toolkit:AutoCompleteBox 
-                        x:Name="GenreBox" Margin="11,12,0,0" MaxWidth="600" MinWidth="200"
+                        x:Name="GenreBox" Margin="11,12,0,0" MaxWidth="260" MinWidth="200"
                         FontFamily="Century Gothic" FontSize="14" Height="23"
                         Foreground="#FF3E3E42" DockPanel.Dock="Top"
                         Text="{Binding Genre, Mode=TwoWay}"
