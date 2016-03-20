@@ -11,7 +11,13 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Background="#FF3E3E42" x:Name = "MyTicks"  HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="60">
+        <Grid Grid.Row="0" x:Name = "MyTicks"  HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="60">
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FF3E3E42" Offset="0.691"/>
+                    <GradientStop Color="#FF139EE0" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
 
             <TextBlock Text="Прочитано" TextAlignment="Left" Margin="120,7,0,0" FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Foreground="White" />
             <TextBlock Text="Читаю" TextAlignment="Left" HorizontalAlignment="Left" FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Foreground="White" Margin="360,7,0,0" />
@@ -136,7 +142,7 @@
                             SelectedDate="{Binding FinishTime, UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
 
-            </Grid>
+        </Grid>
 
         <Grid Grid.Row="2">
             <DockPanel Margin="30,15,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
@@ -178,9 +184,9 @@
                     Height="70" Width="70">
                 <Image Source="../logo_save.png"/>
             </Button>
-            
+
         </Grid>
-        
+
         <Grid Grid.Row="3" Background="#FF3E3E42"/>
     </Grid>
 </Window>
