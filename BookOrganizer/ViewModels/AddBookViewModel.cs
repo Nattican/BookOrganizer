@@ -25,6 +25,7 @@ namespace BookOrganizer.ViewModels
             get { return genres; }
             set { genres = value; OnPropertyChanged("Genres"); }
         }
+
         public Author Author
         {
             get { return book.Author; }
@@ -125,39 +126,13 @@ namespace BookOrganizer.ViewModels
             }
         }
         #endregion
+
         #region visual properties
-        private int selectedMode = 0;
-        public int SelectedMode
-        {
-            get { return selectedMode; }
-            set
-            {
-                selectedMode = value;
-                switch (value)
-                {
-                    case 0:
-                        AfterRead = true; break;
-                    case 1:
-                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
-                    case 2:
-                        AfterRead = false; Comment = ""; Mark = 0; FinishTime = null; break;
-                }
-                OnPropertyChanged("SelectedMode");
-            }
-        }
+
         public int[] AvailableMarks
         {
             get
             { return new int[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 }; }
-        }
-        private bool afterRead = true;
-        public bool AfterRead
-        {
-            get { return afterRead; }
-            set
-            {
-                afterRead = value; OnPropertyChanged("AfterRead");
-            }
         }
         #endregion
         public Action<Book> BookOut;
@@ -174,15 +149,23 @@ namespace BookOrganizer.ViewModels
                 if (b.Genre != null)
                 {
                     var g = Genres.FirstOrDefault(p => p.Name == book.Genre.Name);
-                    if (g != null) { c.Genres.Add(book.Genre); c.SaveChanges(); book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name); }
-                    Genres = c.Genres.ToList();
+                    if (g != null)
+                    {
+                        book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name);
+                    }
+                    else { c.Genres.Add(book.Genre); c.SaveChanges(); book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name); Genres = c.Genres.ToList(); }
+
                 }
 
                 if (b.Author != null)
                 {
-                    var a = Authors.FirstOrDefault(p => p.Name == book.Genre.Name);
-                    if (a != null) { c.Authors.Add(book.Author); c.SaveChanges(); book.Author = Authors.FirstOrDefault(p => p.Name == book.Genre.Name); }
-                    Authors = c.Authors.ToList();
+                    var a = Authors.FirstOrDefault(p => p.Name == book.Author.Name);
+                    if (a != null)
+                    {
+                        book.Author = Authors.FirstOrDefault(p => p.Name == book.Author.Name);
+                    }
+                    else { c.Authors.Add(book.Author); c.SaveChanges(); book.Author = Authors.FirstOrDefault(p => p.Name == book.Author.Name); Authors = c.Authors.ToList(); }
+
                 }
             }
         }

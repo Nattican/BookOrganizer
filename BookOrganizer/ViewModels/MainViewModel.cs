@@ -15,7 +15,7 @@ namespace BookOrganizer.ViewModels
         private ObservableCollection<Book> currentList;
         private string selectedMode = "0";
         private Book selectedBook;
-        private string[] mode;
+        private string[] radioButtons;
         private Stack<object[]> Undos = new Stack<object[]>();
         private Stack<object[]> Redos = new Stack<object[]>();
 
@@ -34,20 +34,31 @@ namespace BookOrganizer.ViewModels
             set
             {
                 selectedMode = value;
+                var t = new string[] { "Transparent", "Transparent", "Transparent" };
+                t[int.Parse(selectedMode)] = "#FFBFBFBF";
+                MyRadioButtons = t;
                 OnPropertyChanged("SelectedMode");
-                OpenList(value);
             }
         }
         public Book SelectedBook
         {
             get { return selectedBook; }
-            set { selectedBook = value; OnPropertyChanged("SelectedBook"); }
+            set
+            {
+                selectedBook = value;
+                TimePeriod = selectedBook != null && SelectedBook.StartTime != null ? (SelectedBook.StartTime.Value.Date.ToShortDateString() + " - " + (SelectedBook.FinishTime != null ? SelectedBook.FinishTime.Value.Date.ToShortDateString() : "  ???")) : "";
+                OnPropertyChanged("SelectedBook");
+            }
         }
-        public string[] Mod
+        public string[] MyRadioButtons
         {
-            get { return mode; }
-            set { mode = value; OnPropertyChanged("Mod"); }
+            get { return radioButtons; }
+            set { radioButtons = value; OnPropertyChanged("MyRadioButtons"); }
         }
+
+        private string timePeriod;
+        public string TimePeriod { get { return timePeriod; } set { timePeriod = value; OnPropertyChanged("TimePeriod"); } }
+
 
         #region Constructor
 
@@ -102,15 +113,15 @@ namespace BookOrganizer.ViewModels
                 {
                     case "2":
                         temp = c.Books.Include("Author").Include("Genre").Where(z => (z.StartTime == null) || (((DateTime)(z.StartTime)).CompareTo(DateTime.Now) == 1)).ToList();
-                        Mod = new string[] { "Transparent", "Transparent", "#FFBFBFBF" };
+                        SelectedMode = "2";
                         break;
                     case "1":
                         temp = c.Books.Include("Author").Include("Genre").Where(z => (z.StartTime != null) && (((DateTime)(z.StartTime)).CompareTo(DateTime.Now) != 1) && z.FinishTime == null).ToList();
-                        Mod = new string[] { "Transparent", "#FFBFBFBF", "Transparent" };
+                        SelectedMode = "1";
                         break;
                     case "0":
                         temp = c.Books.Include("Author").Include("Genre").Where(z => (z.StartTime != null) && (((DateTime)(z.StartTime)).CompareTo(DateTime.Now) != 1) && z.FinishTime != null).ToList();
-                        Mod = new string[] { "#FFBFBFBF", "Transparent", "Transparent" };
+                        SelectedMode = "0";
                         break;
                     default:
                         break;
@@ -139,16 +150,16 @@ namespace BookOrganizer.ViewModels
             var v = new AddBookView();
             v.DataContext = new AddBookViewModel(new Book());
             ((AddBookViewModel)v.DataContext).BookOut += (b) =>
-             {
+            {
 
-                 AddBookToDB(b);
-                 using (var c = new Context())
-                 {
-                     Undos.Push(new object[] { "delete", c.Books.Include("Author").Include("Genre").First(p => p.Author.Name == b.Author.Name && p.Year == b.Year && p.Title == b.Title) });
-                 }
-                 OpenList(selectedMode);
-                 v.Close();
-             };
+                AddBookToDB(b);
+                using (var c = new Context())
+                {
+                    Undos.Push(new object[] { "delete", c.Books.Include("Author").Include("Genre").First(p => p.Author.Name == b.Author.Name && p.Year == b.Year && p.Title == b.Title) });
+                }
+                OpenList(selectedMode);
+                v.Close();
+            };
             v.Show();
         }
         #endregion
@@ -169,53 +180,62 @@ namespace BookOrganizer.ViewModels
 
         private void DeleteBook()
         {
-            var id = SelectedBook.Id;
-            using (var c = new Context())
+            if (selectedBook != null)
             {
-                Undos.Push(new object[] { "add", c.Books.Include("Author").Include("Genre").First(p => p.Id == id) });
+                var id = SelectedBook.Id;
+                using (var c = new Context())
+                {
+                    Undos.Push(new object[] { "add", c.Books.Include("Author").Include("Genre").First(p => p.Id == id) });
+                }
+                RemoveBookFromDB(id);
+                OpenList(selectedMode);
             }
-            RemoveBookFromDB(id);
-            OpenList(selectedMode);
         }
 
         #endregion
 
         #region EditBookCommand
-        private DelegateCommand<int> editBookCommand;
+        private DelegateCommand editBookCommand;
         public ICommand EditBookCommand
         {
             get
             {
                 if (editBookCommand == null)
                 {
-                    editBookCommand = new DelegateCommand<int>(EditBook);
+                    editBookCommand = new DelegateCommand(EditBook);
                 }
                 return editBookCommand;
             }
         }
 
-        private void EditBook(int id)
+        private void EditBook()
         {
-            using (var c = new Context())
+            if (selectedBook != null)
             {
-                var bookForEdit = c.Books.Include("Author").Include("Genre").First(p => p.Id == id);
-                object old = bookForEdit.Clone();
-                var v = new AddBookView();
-                v.DataContext = new AddBookViewModel(bookForEdit);
-
-                ((AddBookViewModel)v.DataContext).BookOut += (b) =>
+                var id = selectedBook.Id;
+                using (var c = new Context())
                 {
-                    using (var t = new Context())
+                    var bookForEdit = c.Books.Include("Author").Include("Genre").First(p => p.Id == id);
+                    object old = bookForEdit.Clone();
+                    var v = new AddBookView();
+                    v.DataContext = new AddBookViewModel(bookForEdit);
+
+                    ((AddBookViewModel)v.DataContext).BookOut += (b) =>
                     {
-                        var temp = t.Books.Include("Author").Include("Genre").First(p => p.Id == id);
-                        temp.PullChanges(b);
-                        t.SaveChanges();
-                    }
-                    Undos.Push(new object[] { "unedit", (Book)old });
-                    OpenList(selectedMode);
-                    v.Close();
-                };
-                v.Show();
+                        using (var t = new Context())
+                        {
+                            var temp = t.Books.Include("Author").Include("Genre").First(p => p.Id == id);
+                            temp.PullChanges(b);
+                            temp.Author = t.Authors.FirstOrDefault(p => p.Id == temp.Author.Id);
+                            temp.Genre = t.Genres.FirstOrDefault(p => p.Id == temp.Genre.Id);
+                            t.SaveChanges();
+                        }
+                        Undos.Push(new object[] { "unedit", (Book)old });
+                        OpenList(selectedMode);
+                        v.Close();
+                    };
+                    v.Show();
+                }
             }
         }
 
@@ -258,6 +278,7 @@ namespace BookOrganizer.ViewModels
                 return redoCommand;
             }
         }
+
 
         private void Redo()
         {
@@ -321,7 +342,11 @@ namespace BookOrganizer.ViewModels
                         }
                         else
                         {
-                            if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
+                            try
+                            {
+                                if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
+                            }
+                            catch { }
                             Redos.Push(new object[] { "delete", b });
                         }
                     }

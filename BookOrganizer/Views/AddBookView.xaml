@@ -9,20 +9,12 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
-        <Grid Grid.Row="0" x:Name = "MyTicks" Margin="10 3 10 0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-
-            <TextBlock Text="Читал" TextAlignment="Left" FontSize="16" />
-            <TextBlock Text="Читаю/Сейчас начну читать" HorizontalAlignment="Center" FontSize="16"/>
-            <TextBlock Text="Буду читать" TextAlignment="Right" FontSize="16"/>
-            <Slider x:Name="StateOfBook" Margin="0 20 0 0" Minimum="0" Maximum="2" Value="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"  IsSnapToTickEnabled="true" VerticalAlignment="Top" HorizontalAlignment="Stretch" TickPlacement="TopLeft" Foreground="#FF281E1E"/>
-        </Grid>
-
         <Grid Grid.Row="1" Margin="10">
             <DockPanel HorizontalAlignment="Left" VerticalAlignment="Top" Margin="5 -10 0 0 ">
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Автор книги" FontSize="13"/>
                 <ComboBox x:Name="AuthorBox" FontSize="16" Height="26" Width="130" SelectedItem="{Binding Author, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Authors}" DisplayMemberPath="Name">
                     <ComboBox.InputBindings>
-                        <MouseBinding Command="{Binding DataContext.NewAuthorCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                        <MouseBinding Command="{Binding DataContext.NewAuthorCommand, RelativeSource={RelativeSource AncestorType=Window}}" MouseAction="RightClick"/>
                     </ComboBox.InputBindings>
                 </ComboBox>
             </DockPanel>
@@ -39,11 +31,11 @@
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Аннотация" FontSize="13"/>
                 <TextBox Text="{Binding Annotation, UpdateSourceTrigger=PropertyChanged}" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" x:Name="AnnotationBox" FontSize="14" Height="80" Width="310"/>
             </DockPanel>
-            <DockPanel IsEnabled="{Binding AfterRead}" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <DockPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Комментарий" FontSize="13"/>
                 <TextBox TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" Text="{Binding Comment, UpdateSourceTrigger=PropertyChanged}" x:Name="CommentBox" FontSize="14" Height="80" Width="310"/>
             </DockPanel>
-            <DockPanel IsEnabled="{Binding AfterRead}" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="150 1 0 0">
+            <DockPanel HorizontalAlignment="Center" VerticalAlignment="Top" Margin="150 1 0 0">
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Дата завершения" FontSize="13"/>
                 <DatePicker x:Name="FinishTimeBox" SelectedDateChanged="FinishTimeBox_SelectedDateChanged" Height="26" Width="120" IsTodayHighlighted="True" DisplayDateStart="01.01.1974"  DisplayDateEnd="01.01.2100" SelectedDate="{Binding FinishTime, UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
@@ -60,7 +52,7 @@
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Cтраниц" FontSize="13"/>
                 <TextBox x:Name="PagesBox" FontSize="16" Height="26" KeyDown="PagesBox_KeyDown" Text="{Binding Pages, UpdateSourceTrigger=PropertyChanged}" Width="60"/>
             </DockPanel>
-            <DockPanel IsEnabled="{Binding  AfterRead}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110 0 0 10">
+            <DockPanel HorizontalAlignment="Left" VerticalAlignment="Center" Margin="110 0 0 10">
                 <TextBlock HorizontalAlignment="Center" DockPanel.Dock="Top" Text="Моя оценка" FontSize="13"/>
                 <ComboBox x:Name="MarkBox" SelectedItem="{Binding Mark, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding AvailableMarks}" FontSize="16" Height="26" Width="60"/>
             </DockPanel>
