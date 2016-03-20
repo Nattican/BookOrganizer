@@ -158,9 +158,6 @@
     <None Include="Resources\logo_learn_more.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="logo_learn_more.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="logo_trash_bin.png" />
   </ItemGroup>
   <ItemGroup>
@@ -168,6 +165,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="logo_edit_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo_bookOrg_transp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo_white_on_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="logo_save.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
