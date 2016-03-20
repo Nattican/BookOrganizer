@@ -17,6 +17,11 @@ namespace BookOrganizer.Views
 
         }
 
+
+
+
+
+
         private void OnlyDigitsOnlyFour(object sender, KeyEventArgs e)
         {
             string[] alow = new string[] { "D0", "D1", "D2", "D3", "D4", "D5", "D6", "D7", "D8", "D9" };
@@ -39,9 +44,29 @@ namespace BookOrganizer.Views
             e.Handled = true;
         }
 
+
+        private void StartTimeBox_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (StartTimeBox.SelectedDate == null)
+            {
+                FinishTimeBox.SelectedDate = null;
+            }
+            else
+            {
+                if (FinishTimeBox.SelectedDate != null)
+                {
+                    var dS = Convert.ToDateTime(StartTimeBox.SelectedDate);
+                    var dF = Convert.ToDateTime(FinishTimeBox.SelectedDate);
+                    if (dF.CompareTo(dS) == -1) { FinishTimeBox.SelectedDate = StartTimeBox.SelectedDate; }
+                }
+            }
+        }
+
         private void FinishTimeBox_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
+            
             if (StartTimeBox.SelectedDate == null) { FinishTimeBox.SelectedDate = null; return; }
+
             var dS = Convert.ToDateTime(StartTimeBox.SelectedDate);
             var dF = Convert.ToDateTime(FinishTimeBox.SelectedDate);
             if (dF.CompareTo(dS) == -1) { FinishTimeBox.SelectedDate = StartTimeBox.SelectedDate; }
@@ -59,5 +84,6 @@ namespace BookOrganizer.Views
             }
             e.Handled = true;
         }
+
     }
 }

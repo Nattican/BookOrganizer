@@ -31,8 +31,8 @@
                 <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="Править">
-                <MenuItem Header="Отменить" InputGestureText="Ctrl-Z" Command="{Binding UndoCommand}"/>
-                <MenuItem Header="Повторить" InputGestureText="Ctrl-Y" Command="{Binding RedoCommand}"/>
+                <MenuItem Header="Отменить" InputGestureText="Ctrl-Z" Command="{Binding UndoCommand}" IsEnabled="{Binding UndoIsEnabled}"/>
+                <MenuItem Header="Повторить" InputGestureText="Ctrl-Y" Command="{Binding RedoCommand}" IsEnabled="{Binding RedoIsEnabled}"/>
             </MenuItem>
         </Menu>
 

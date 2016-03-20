@@ -171,6 +171,7 @@ namespace BookOrganizer.ViewModels
 
         private void Submit()
         {
+            if (book.Title == null || book.Title.Trim() == "" || Author == null || Author.Trim() == "" || Genre == null || Genre.Trim() == "") { MessageBox.Show("Поля \"Название\",\"Автор\",\"Жанр\" обязательны для заполнения!\n\n  \"Мы вновь спасли этот грешный мир\" - Ваша команда разработчиков"); return; }
             using (var c = new Context())
             {
                 var a = c.Authors.FirstOrDefault(p => p.Name == Author);
@@ -181,7 +182,6 @@ namespace BookOrganizer.ViewModels
                     book.Author = c.Authors.First(p => p.Name == Author);
                 }
                 else { book.Author = a; }
-
                 var g = c.Genres.FirstOrDefault(p => p.Name == Genre);
                 if (g == null)
                 {

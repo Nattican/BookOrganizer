@@ -20,6 +20,14 @@ namespace BookOrganizer.ViewModels
         private Stack<object[]> Undos = new Stack<object[]>();
         private Stack<object[]> Redos = new Stack<object[]>();
 
+        public bool UndoIsEnabled
+        {
+            get { return Undos.Count() != 0; }
+        }
+        public bool RedoIsEnabled
+        {
+            get { return Redos.Count() != 0; }
+        }
         public ObservableCollection<Book> CurrentList
         {
             get { return currentList; }
@@ -157,6 +165,7 @@ namespace BookOrganizer.ViewModels
                 using (var c = new Context())
                 {
                     Undos.Push(new object[] { "delete", c.Books.Include("Author").Include("Genre").First(p => p.Author.Name == b.Author.Name && p.Year == b.Year && p.Title == b.Title) });
+                    OnPropertyChanged("UndoIsEnabled");
                 }
                 OpenList(selectedMode);
                 v.Close();
@@ -187,6 +196,7 @@ namespace BookOrganizer.ViewModels
                 using (var c = new Context())
                 {
                     Undos.Push(new object[] { "add", c.Books.Include("Author").Include("Genre").First(p => p.Id == id) });
+                    OnPropertyChanged("UndoIsEnabled");
                 }
                 RemoveBookFromDB(id);
                 OpenList(selectedMode);
@@ -254,6 +264,7 @@ namespace BookOrganizer.ViewModels
                             t.SaveChanges();
                         }
                         Undos.Push(new object[] { "unedit", (Book)old });
+                        OnPropertyChanged("UndoIsEnabled");
                         OpenList(selectedMode);
                         v.Close();
                     };
@@ -284,6 +295,7 @@ namespace BookOrganizer.ViewModels
         {
             if (Undos.Count == 0) return;
             var paramOBJ = Undos.Pop();
+            OnPropertyChanged("UndoIsEnabled");
             Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]));
         }
         #endregion
@@ -307,6 +319,7 @@ namespace BookOrganizer.ViewModels
         {
             if (Redos.Count == 0) return;
             var paramOBJ = Redos.Pop();
+            OnPropertyChanged("RedoIsEnabled");
             Do((string)(paramOBJ[0]), (Book)(paramOBJ[1]), true);
         }
         #endregion
@@ -352,9 +365,13 @@ namespace BookOrganizer.ViewModels
                             if (reverse)
                             {
                                 Undos.Push(new object[] { "add", temp });
+                                OnPropertyChanged("UndoIsEnabled");
                             }
                             else
+                            {
                                 Redos.Push(new object[] { "add", temp });
+                                OnPropertyChanged("RedoIsEnabled");
+                            }
                         }
                         break;
                     case "add":
@@ -364,15 +381,23 @@ namespace BookOrganizer.ViewModels
                             if (reverse)
                             {
                                 Undos.Push(new object[] { "delete", b });
+                                OnPropertyChanged("UndoIsEnabled");
+
                             }
                             else
                             {
                                 try
                                 {
-                                    if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
+                                    if ((string)(Undos.Peek()[0]) == "unedit")
+                                    {
+                                        Undos.Pop();
+                                        OnPropertyChanged("UndoIsEnabled");
+                                    }
                                 }
                                 catch { }
                                 Redos.Push(new object[] { "delete", b });
+                                OnPropertyChanged("RedoIsEnabled");
+
                             }
                         }
                         break;
@@ -383,10 +408,14 @@ namespace BookOrganizer.ViewModels
                             if (reverse)
                             {
                                 Undos.Push(new object[] { "edit", temp.Clone() });
+                                OnPropertyChanged("UndoIsEnabled");
+
                             }
                             else
                             {
                                 Redos.Push(new object[] { "edit", temp.Clone() });
+                                OnPropertyChanged("RedoIsEnabled");
+
                             }
 
                             temp.PullChanges(b);
@@ -401,9 +430,14 @@ namespace BookOrganizer.ViewModels
                             if (reverse)
                             {
                                 Undos.Push(new object[] { "unedit", temp.Clone() });
+                                OnPropertyChanged("UndoIsEnabled");
+
                             }
                             else
+                            {
                                 Redos.Push(new object[] { "unedit", temp.Clone() });
+                                OnPropertyChanged("RedoIsEnabled");
+                            }
 
                             temp.PullChanges(b);
                             c.SaveChanges();
