@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BookOrganizer.Views;
 using BookOrganizer.ViewModels;
-
+using BookOrganizer;
 namespace Tests
 {
     [TestClass]
@@ -18,5 +18,6 @@ namespace Tests
             Assert.AreEqual(book, obj.GetFieldOrProperty("book") as BookOrganizer.Book);
 
         }
+
     }
 }

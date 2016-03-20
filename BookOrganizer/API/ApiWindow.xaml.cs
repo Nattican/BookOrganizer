@@ -8,6 +8,7 @@ using System.Windows.Threading;
 using Newtonsoft.Json;
 using BookOrganizer.Views;
 using BookOrganizer.ViewModels;
+using System.Linq;
 
 namespace BookOrganizer.API
 {
@@ -40,6 +41,16 @@ namespace BookOrganizer.API
                     {
                         using (var c = new Context())
                         {
+                            if (b.Author != null)
+                            {
+                                var k = c.Authors.FirstOrDefault(p => p.Name == b.Author.Name);
+                                if (k != null) { b.Author = k; }
+                            }
+                            if (b.Genre != null)
+                            {
+                                var t = c.Genres.FirstOrDefault(p => p.Name == b.Genre.Name);
+                                if (t != null) { b.Genre = t; }
+                            }
                             c.Books.Add(b);
                             c.SaveChanges();
                         }
