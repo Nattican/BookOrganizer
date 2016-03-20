@@ -7,6 +7,7 @@ using System.Windows.Input;
 using BookOrganizer.Commands;
 using System.Collections.ObjectModel;
 using BookOrganizer.Views;
+using BookOrganizer.API;
 
 namespace BookOrganizer.ViewModels
 {
@@ -160,7 +161,7 @@ namespace BookOrganizer.ViewModels
                 OpenList(selectedMode);
                 v.Close();
             };
-            v.Show();
+            v.ShowDialog();
         }
         #endregion
 
@@ -190,6 +191,28 @@ namespace BookOrganizer.ViewModels
                 RemoveBookFromDB(id);
                 OpenList(selectedMode);
             }
+        }
+
+        #endregion
+
+        #region OpenLibraryCommand
+        private DelegateCommand openLibraryCommand;
+        public ICommand OpenLibraryCommand
+        {
+            get
+            {
+                if (openLibraryCommand == null)
+                {
+                    openLibraryCommand = new DelegateCommand(OpenLibrary);
+                }
+                return openLibraryCommand;
+            }
+        }
+
+        private void OpenLibrary()
+        {
+            ApiWindow api = new ApiWindow();
+            api.ShowDialog();
         }
 
         #endregion
@@ -234,7 +257,7 @@ namespace BookOrganizer.ViewModels
                         OpenList(selectedMode);
                         v.Close();
                     };
-                    v.Show();
+                    v.ShowDialog();
                 }
             }
         }
@@ -317,76 +340,80 @@ namespace BookOrganizer.ViewModels
         }
         public void Do(string param, Book b, bool reverse = false)
         {
-            switch (param)
+            try
             {
-                case "delete":
-                    using (var c = new Context())
-                    {
-                        var temp = c.Books.Include("Author").Include("Genre").First(p => p.Title == b.Title && p.Author.Name == b.Author.Name && p.Year == b.Year);
-                        RemoveBookFromDB(temp.Id);
-                        if (reverse)
+                switch (param)
+                {
+                    case "delete":
+                        using (var c = new Context())
                         {
-                            Undos.Push(new object[] { "add", temp });
-                        }
-                        else
-                            Redos.Push(new object[] { "add", temp });
-                    }
-                    break;
-                case "add":
-                    using (var c = new Context())
-                    {
-                        AddBookToDB(b);
-                        if (reverse)
-                        {
-                            Undos.Push(new object[] { "delete", b });
-                        }
-                        else
-                        {
-                            try
+                            var temp = c.Books.Include("Author").Include("Genre").First(p => p.Title == b.Title && p.Author.Name == b.Author.Name && p.Year == b.Year);
+                            RemoveBookFromDB(temp.Id);
+                            if (reverse)
                             {
-                                if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
+                                Undos.Push(new object[] { "add", temp });
                             }
-                            catch { }
-                            Redos.Push(new object[] { "delete", b });
+                            else
+                                Redos.Push(new object[] { "add", temp });
                         }
-                    }
-                    break;
-                case "unedit":
-                    using (var c = new Context())
-                    {
-                        var temp = c.Books.Include("Author").Include("Genre").First(p => p.Id == b.Id);
-                        if (reverse)
+                        break;
+                    case "add":
+                        using (var c = new Context())
                         {
-                            Undos.Push(new object[] { "edit", temp.Clone() });
+                            AddBookToDB(b);
+                            if (reverse)
+                            {
+                                Undos.Push(new object[] { "delete", b });
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    if ((string)(Undos.Peek()[0]) == "unedit") { Undos.Pop(); }
+                                }
+                                catch { }
+                                Redos.Push(new object[] { "delete", b });
+                            }
                         }
-                        else
+                        break;
+                    case "unedit":
+                        using (var c = new Context())
                         {
-                            Redos.Push(new object[] { "edit", temp.Clone() });
+                            var temp = c.Books.Include("Author").Include("Genre").First(p => p.Id == b.Id);
+                            if (reverse)
+                            {
+                                Undos.Push(new object[] { "edit", temp.Clone() });
+                            }
+                            else
+                            {
+                                Redos.Push(new object[] { "edit", temp.Clone() });
+                            }
+
+                            temp.PullChanges(b);
+                            c.SaveChanges();
                         }
-
-                        temp.PullChanges(b);
-                        c.SaveChanges();
-                    }
-                    break;
-                case "edit":
-                    using (var c = new Context())
-                    {
-
-                        var temp = c.Books.Include("Author").Include("Genre").First(p => p.Id == b.Id);
-                        if (reverse)
+                        break;
+                    case "edit":
+                        using (var c = new Context())
                         {
-                            Undos.Push(new object[] { "unedit", temp.Clone() });
-                        }
-                        else
-                            Redos.Push(new object[] { "unedit", temp.Clone() });
 
-                        temp.PullChanges(b);
-                        c.SaveChanges();
-                    }
-                    break;
-                default:
-                    break;
+                            var temp = c.Books.Include("Author").Include("Genre").First(p => p.Id == b.Id);
+                            if (reverse)
+                            {
+                                Undos.Push(new object[] { "unedit", temp.Clone() });
+                            }
+                            else
+                                Redos.Push(new object[] { "unedit", temp.Clone() });
+
+                            temp.PullChanges(b);
+                            c.SaveChanges();
+                        }
+                        break;
+                    default:
+                        break;
+                }
             }
+            catch { MessageBox.Show("Последнняя вызванная вами команда могла привести к ошибке во временном пространстве.\n\n  \"Мы вновь спасли этот грешный мир\" - Ваша команда разработчиков"); }
             OpenList(SelectedMode);
         }
     }

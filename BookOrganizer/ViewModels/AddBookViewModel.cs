@@ -12,26 +12,29 @@ namespace BookOrganizer.ViewModels
     {
         #region Book object with public methods
         private Book book;
-        private List<Genre> genres;
-        private List<Author> authors;
+        private List<string> genres;
+        private List<string> authors;
 
-        public List<Author> Authors
+        public List<string> Authors
         {
             get { return authors; }
             set { authors = value; OnPropertyChanged("Authors"); }
         }
-        public List<Genre> Genres
+        public List<string> Genres
         {
             get { return genres; }
             set { genres = value; OnPropertyChanged("Genres"); }
         }
 
-        public Author Author
+        private string stringAuthor;
+        private string stringGenre;
+
+        public string Author
         {
-            get { return book.Author; }
+            get { return stringAuthor; }
             set
             {
-                book.Author = value;
+                stringAuthor = value;
                 OnPropertyChanged("Author");
             }
         }
@@ -89,12 +92,12 @@ namespace BookOrganizer.ViewModels
                 OnPropertyChanged("StartTime");
             }
         }
-        public Genre Genre
+        public string Genre
         {
-            get { return book.Genre; }
+            get { return stringGenre; }
             set
             {
-                book.Genre = value;
+                stringGenre = value;
                 OnPropertyChanged("Genre");
             }
         }
@@ -141,32 +144,12 @@ namespace BookOrganizer.ViewModels
         public AddBookViewModel(Book b)
         {
             book = b;
+            stringAuthor = book.Author == null ? null : book.Author.Name;
+            stringGenre = book.Genre == null ? null : book.Genre.Name;
             using (var c = new Context())
             {
-                Genres = c.Genres.ToList();
-                Authors = c.Authors.ToList();
-
-                if (b.Genre != null)
-                {
-                    var g = Genres.FirstOrDefault(p => p.Name == book.Genre.Name);
-                    if (g != null)
-                    {
-                        book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name);
-                    }
-                    else { c.Genres.Add(book.Genre); c.SaveChanges(); book.Genre = Genres.FirstOrDefault(p => p.Name == book.Genre.Name); Genres = c.Genres.ToList(); }
-
-                }
-
-                if (b.Author != null)
-                {
-                    var a = Authors.FirstOrDefault(p => p.Name == book.Author.Name);
-                    if (a != null)
-                    {
-                        book.Author = Authors.FirstOrDefault(p => p.Name == book.Author.Name);
-                    }
-                    else { c.Authors.Add(book.Author); c.SaveChanges(); book.Author = Authors.FirstOrDefault(p => p.Name == book.Author.Name); Authors = c.Authors.ToList(); }
-
-                }
+                Genres = new List<string>(c.Genres.ToList().Select(p => p.Name));
+                Authors = new List<string>(c.Authors.ToList().Select(p => p.Name));
             }
         }
 
@@ -188,6 +171,26 @@ namespace BookOrganizer.ViewModels
 
         private void Submit()
         {
+            using (var c = new Context())
+            {
+                var a = c.Authors.FirstOrDefault(p => p.Name == Author);
+                if (a == null)
+                {
+                    c.Authors.Add(new Author() { Name = Author });
+                    c.SaveChanges();
+                    book.Author = c.Authors.First(p => p.Name == Author);
+                }
+                else { book.Author = a; }
+
+                var g = c.Genres.FirstOrDefault(p => p.Name == Genre);
+                if (g == null)
+                {
+                    c.Genres.Add(new Genre() { Name = Genre });
+                    c.SaveChanges();
+                    book.Genre = c.Genres.First(p => p.Name == Genre);
+                }
+                else { book.Genre = g; }
+            }
             if (BookOut != null) { BookOut(book); }
         }
 

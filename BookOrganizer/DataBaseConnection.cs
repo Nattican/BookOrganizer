@@ -10,9 +10,8 @@ namespace BookOrganizer
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Author> Authors { get; set; }
 
-        //public Context() : base("BookOrganiser_H") { }
-
-        public Context() : base("Data Source=SHMIKEL-NB\\SQLExpress;Initial Catalog=BookOrganiser_H;Integrated Security=True;") { }
+        public Context(): base("BookOrganizer_SHOB"){}
+        //public Context() : base("Data Source=SHMIKEL-NB\\SQLExpress;Initial Catalog=BookOrganiser_H;Integrated Security=True;") { }
 
     }
 

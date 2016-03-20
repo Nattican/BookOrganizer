@@ -17,25 +17,22 @@
         <KeyBinding Key="Q" Modifiers="Control" Command="{StaticResource ExitCommandReference}" />
         <KeyBinding Key="Z" Modifiers="Control" Command="{Binding UndoCommand}" />
         <KeyBinding Key="Y" Modifiers="Control" Command="{Binding RedoCommand}" />
+        <KeyBinding Key="L" Modifiers="Control" Command="{Binding OpenLibraryCommand}"/>
+        <KeyBinding Key="A" Modifiers="Control" Command="{Binding AddBookCommand}"/>
+        <KeyBinding Key="E" Modifiers="Control" Command="{Binding EditBookCommand}"/>
+        <KeyBinding Key="D" Modifiers="Control" Command="{Binding DeleteBookCommand}"/>
     </Window.InputBindings>
 
     <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Файл">
-                <MenuItem Header="Сохранить..." InputGestureText="Ctrl-S"/>
+                <MenuItem Header="Библиотека" Command="{Binding OpenLibraryCommand}" InputGestureText="Ctrl-L"/>
                 <Separator/>
-                <MenuItem Header="Библиотека"/>
-                <!--Все списки в одном-->
+                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
             <MenuItem Header="Править">
                 <MenuItem Header="Отменить" InputGestureText="Ctrl-Z" Command="{Binding UndoCommand}"/>
                 <MenuItem Header="Повторить" InputGestureText="Ctrl-Y" Command="{Binding RedoCommand}"/>
-            </MenuItem>
-            <MenuItem Header="Что бы почитать?" Click="MenuItem_Click"/>
-            <MenuItem Header="BookOrganizer" >
-                <MenuItem IsEnabled="False" Header="О программе..." InputGestureText="Ctrl-O"/>
-                <MenuItem IsEnabled="False" Header="Настройки..." InputGestureText="Ctrl-N"/>
-                <MenuItem Command="{Binding ExitCommand}" Header="Завершить BookOrganaizer" InputGestureText="Ctrl-Q" />
             </MenuItem>
         </Menu>
 
@@ -122,17 +119,19 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn
                         Header="Название" 
-                        Width="160"
+                        Width="210"
+                        
                         Binding="{Binding .Title}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center" />
+                                <Setter Property="HorizontalAlignment" Value="Left" />
+                                <Setter Property="Padding" Value="5 0 0 0"/>
                             </Style>
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Header="Автор"     
-                        Width="160"
+                        Width="150"
                         Binding="{Binding .Author.Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
@@ -142,7 +141,7 @@
                     </DataGridTextColumn>
                     <DataGridTextColumn
                         Header="Жанр"       
-                        Width="150"
+                        Width="130"
                         Binding="{Binding .Genre.Name}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
@@ -168,15 +167,15 @@
                             <TextBlock Name="AnnotationBlockHeader" Text="Аннотация: " Margin="10,205,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FF139EE0" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="CommentBlockHeader" Text="Комментарий: " Margin="10,260,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FF139EE0" FontFamily="Century Gothic" FontSize="14"/>
 
-                            <TextBlock Name="TitleBlock" Text="{Binding .Title}" Margin="90,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBlock Name="TitleBlock" Text="{Binding .Title}" ToolTip="{Binding .Title}" MaxWidth="175" Margin="90,20,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="AuthorBlock" Text="{Binding .Author.Name}" Margin="62,50,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="GenreBlock" Text="{Binding .Genre.Name}" Margin="62,80,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="YearBlock" Text="{Binding .Year}" Margin="45,110,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="PagesNumberBlock" Text="{Binding .Pages}" Margin="130,130,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="MarkBlock" Text="{Binding .Mark}" Margin="105,150,0,0" HorizontalAlignment="Left" TextWrapping="Wrap"  VerticalAlignment="Top"  Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
                             <TextBlock Name="ReadingPeriodBlock" Margin="80,186,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Text="{Binding DataContext.TimePeriod, RelativeSource={RelativeSource AncestorType=Window}}" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            <TextBlock Name="AnnotationBlock" Text="{Binding .Annotation}" Margin="95,205,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
-                            <TextBlock Name="CommentBlock" Text="{Binding .Comment}" Margin="125,260,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14"/>
+                            <TextBox Name="AnnotationBlock" Text="{Binding .Annotation}" Margin="95,205,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14" Height="50" Background="Transparent" BorderThickness="0"/>
+                            <TextBox Name="CommentBlock" Text="{Binding .Comment}" Margin="125,260,3.5,0" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" IsReadOnly="True" Foreground="#FFFEFFFF" FontFamily="Century Gothic" FontSize="14" Height="55" Background="Transparent" BorderThickness="0"/>
 
                             <TextBlock HorizontalAlignment="Stretch" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" Background="#FF139EE0" Foreground="White" Width="277" Height="17" FontFamily="Century Gothic" FontSize="14"><Run Text="Описание"/><LineBreak/><Run/></TextBlock>
 
