@@ -117,6 +117,7 @@ namespace BookOrganizer.ViewModels
         {
             using (var c = new Context())
             {
+                c.SaveChanges();
                 List<Book> temp = new List<Book>();
                 switch (param)
                 {
