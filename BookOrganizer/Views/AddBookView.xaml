@@ -15,16 +15,8 @@
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#FF3E3E42" x:Name = "MyTicks"  HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="60">
+            <Image Source="C:\Users\shmik\Desktop\BookOrganizer\BookOrganizer\logo_bookOrg_transp_long.png" HorizontalAlignment="Center"/>
 
-            <!--<TextBlock Text="Прочитано" TextAlignment="Left" Margin="120,7,0,0" FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Foreground="White" />
-            <TextBlock Text="Читаю" TextAlignment="Left" HorizontalAlignment="Left" FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Foreground="White" Margin="360,7,0,0" />
-            <TextBlock Text="Вишлист" TextAlignment="Right" HorizontalAlignment="Right" FontFamily="Century Gothic" FontSize="16" FontWeight="Bold" Margin="0,7,140,27" Foreground="White"/>
-            <Slider x:Name="StateOfBook" Minimum="0" Maximum="2" 
-                        Value="{Binding SelectedMode, UpdateSourceTrigger=PropertyChanged}"  
-                        IsSnapToTickEnabled="true" 
-                        VerticalAlignment="Bottom" HorizontalAlignment="Center" 
-                        TickPlacement="TopLeft" Foreground="White" 
-                        Width="450" Height="26" Margin="100,0,99,8"/>-->
         </Grid>
 
         <Grid Grid.Row="1" Margin="0,0,0,0.5">
@@ -102,7 +94,7 @@
                             Foreground="#FF3E3E42"
                             IsTodayHighlighted="True" DisplayDateStart="01.01.1974"  
                             DisplayDateEnd="01.01.2100" 
-                            SelectedDate="{Binding StartTime, UpdateSourceTrigger=PropertyChanged}"/>
+                            SelectedDate="{Binding StartTime, UpdateSourceTrigger=PropertyChanged}" SelectedDateChanged="StartTimeBox_SelectedDateChanged"/>
             </DockPanel>
 
             <DockPanel HorizontalAlignment="Left" 
